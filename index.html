@@ -73,7 +73,27 @@ textarea{font:inherit;width:100%;min-height:80px;padding:12px;border-radius:12px
 .crown{position:fixed;left:50%;top:32%;margin-left:-60px;font-size:120px;z-index:99;pointer-events:none;animation:crown 1s both}
 .toast{position:fixed;top:calc(16px + env(safe-area-inset-top,0px));left:50%;background:var(--pri);color:var(--prt);font-weight:800;padding:10px 18px;border-radius:99px;z-index:99;animation:toast 2s both}
 @keyframes toast{0%{opacity:0;transform:translate(-50%,-20px)}15%,80%{opacity:1;transform:translate(-50%,0)}100%{opacity:0;transform:translate(-50%,-10px)}}
-.hearts{font-size:30px;animation:pulse 1.6s infinite}</style>
+.hearts{font-size:30px;animation:pulse 1.6s infinite}.menu{display:block}
+@media(min-width:900px){
+#app{max-width:960px;padding:28px 24px 60px}
+#app[data-v^="setup"],#app[data-v^="join"],#app[data-v^="create"],#app[data-v="profile"],#app[data-v="roomlobby"],#app[data-v="roomroundend"],#app[data-v="roomfinished"]{max-width:600px}
+h1{font-size:38px}
+.menu{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:14px}
+button.big{padding:44px 16px;font-size:22px}
+.grid{grid-template-columns:repeat(4,1fr)}
+.shopg{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}.shopg .card{margin:0}
+body.inroom{padding-right:356px}
+.fab{display:none}
+.chat{left:auto;right:24px;top:calc(24px + env(safe-area-inset-top,0px));bottom:24px;width:320px;max-width:none;margin:0;display:flex;flex-direction:column}
+.msgs{flex:1;height:auto}
+button:hover{filter:brightness(1.08)}.chip:hover{transform:translateY(-2px)}
+}
+@media(min-width:1100px){
+.play{display:grid;grid-template-columns:340px 1fr;gap:18px;align-items:start}
+.play .turn{grid-column:1/-1}.play .mine{grid-column:1;grid-row:2;margin:0}.play .act{grid-column:1;grid-row:3}
+.play .oth{grid-column:2;grid-row:2/4;display:grid;grid-template-columns:1fr 1fr;gap:10px;align-content:start}
+.oth h2{grid-column:1/-1;margin:0}.oth .card{margin:0}}
+</style>
 </head>
 <body>
 <div id="app"><p class="sub">Cargando…</p></div>
@@ -103,8 +123,8 @@ function vShop(){const e=me.eq||{};
   const btn=(t,x)=>own(x.id)||x.p===0?(e[t]===x.id||(!e[t]&&x.p===0&&t==='fx')?'<span class="tag">Equipado ✓</span>':`<button class="sm" onclick="equip('${t}','${x.id}')">Equipar</button>`):`<button class="sm" onclick="buy('${t}','${x.id}')">🪙 ${x.p}</button>`;
   return `<button class="back" onclick="go('menu')">← Volver</button><h1>🛍️ Tienda</h1><p class="sub">Tenés <b>🪙 ${me.coins||0}</b> · +100 por adivinar · +500 por ganar</p>
 <h2>Banners</h2><div class="card"><div class="row" style="justify-content:space-between"><b>Sin banner</b>${e.bn?`<button class="sm sec" onclick="equip('bn','')">Equipar</button>`:'<span class="tag">Equipado ✓</span>'}</div></div>
-${BN.map(x=>`<div class="card"><div class="pl bn bn-${x.id}">${av(me)}<span class="n">${esc(me.nick)}</span></div><div class="row" style="justify-content:space-between"><b>${x.n}</b>${btn('bn',x)}</div></div>`).join('')}
-<h2>Efectos de victoria</h2>${FX.map(x=>`<div class="card"><div class="row" style="justify-content:space-between"><b>${x.n}</b><span class="row"><button class="sm sec" onclick="confetti('${x.id}')">Probar</button>${btn('fx',x)}</span></div></div>`).join('')}`}
+<div class="shopg">${BN.map(x=>`<div class="card"><div class="pl bn bn-${x.id}">${av(me)}<span class="n">${esc(me.nick)}</span></div><div class="row" style="justify-content:space-between"><b>${x.n}</b>${btn('bn',x)}</div></div>`).join('')}</div>
+<h2>Efectos de victoria</h2><div class="shopg">${FX.map(x=>`<div class="card"><div class="row" style="justify-content:space-between"><b>${x.n}</b><span class="row"><button class="sm sec" onclick="confetti('${x.id}')">Probar</button>${btn('fx',x)}</span></div></div>`).join('')}</div>`}
 function confetti(fx){fx=fx||(me&&me.eq&&me.eq.fx)||'confetti';play('win');
   const S={confetti:[['🎉','✨','🎊','⭐','💜'],'fall'],rain:[['🪙'],'fall'],hearts:[['💖','💗','💕'],'rise'],fireworks:[['🎆','🎇','✨','💥'],'boom'],crown:[['✨','🎉','👑'],'fall']}[fx]||[['🎉'],'fall'];
   const add=(t,css,cls)=>{const s=document.createElement('span');s.className=cls;s.textContent=t;s.style.cssText=css;document.body.appendChild(s);setTimeout(()=>s.remove(),4200)};
@@ -120,7 +140,7 @@ let sColor=COL[0],sAcc=0,ccSel=[],hint=false,nName='',nChars='',chCh=null,chat=[
 function applyAcc(i){const r=document.documentElement.style;r.setProperty('--pri',ACC[i??me.acc??0]);r.setProperty('--prt','#fff')}
 function startChat(c){chat=[];unread=0;chCh=sb.channel('chat-'+c,{config:{broadcast:{self:true}}}).on('broadcast',{event:'m'},({payload})=>{chat=[...chat,payload].slice(-80);if(payload.u!==uid)play('message');if(!chatOpen)unread++;if(view==='room')render()}).subscribe()}
 function sendChat(){const i=$('#cin'),t=i&&i.value.trim();if(!t||!chCh)return;i.value='';chCh.send({type:'broadcast',event:'m',payload:{u:uid,n:me.nick,e:me.emoji,t}})}
-function chatUI(){return `<button class="fab" onclick="chatOpen=!chatOpen;unread=0;render()">${chatOpen?'✕':'💬'}${unread&&!chatOpen?`<i>${unread}</i>`:''}</button>`+(chatOpen?`<div class="chat"><div class="msgs" id="msgs">${chat.map(m=>`<div class="m ${m.u===uid?'me':''}"><b>${esc(m.e)} ${esc(m.n)}</b> ${esc(m.t)}</div>`).join('')||'<span class="mut">Escribí algo 👋</span>'}</div><div class="row"><input id="cin" maxlength="200" placeholder="Mensaje…" onkeydown="if(event.key==='Enter')sendChat()"><button class="sm" onclick="sendChat()">➤</button></div></div>`:'')}
+function chatUI(){return `<button class="fab" onclick="chatOpen=!chatOpen;unread=0;render()">${chatOpen?'✕':'💬'}${unread&&!chatOpen?`<i>${unread}</i>`:''}</button>`+(chatOpen||wide()?`<div class="chat"><div class="msgs" id="msgs">${chat.map(m=>`<div class="m ${m.u===uid?'me':''}"><b>${esc(m.e)} ${esc(m.n)}</b> ${esc(m.t)}</div>`).join('')||'<span class="mut">Escribí algo 👋</span>'}</div><div class="row"><input id="cin" maxlength="200" placeholder="Mensaje…" onkeydown="if(event.key==='Enter')sendChat()"><button class="sm" onclick="sendChat()">➤</button></div></div>`:'')}
 const esc=s=>String(s??'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
 let db,user,uid,me,view='setup',code=null,room=null,players=[],unsubs=[],msg='',rec='',gtext='',guessing=false,sEmoji=EM[0];
 let mode='default',cats=Object.keys(CATS),custom=[],joinCode='';
@@ -164,7 +184,7 @@ async function init(){
 function render(){
   const a=document.activeElement,id=a&&a.id,val=a&&a.value;
   const v={setup:vSetup,menu:vMenu,profile:vProfile,play:vPlay,create:vCreate,join:vJoin,room:vRoom,shop:vShop}[view];
-  app.innerHTML=v()+(msg?'<p class="err">'+esc(msg)+'</p>':'');
+  app.dataset.v=view+(view==='room'&&room?room.status:'');document.body.classList.toggle('inroom',view==='room');app.innerHTML=v()+(msg?'<p class="err">'+esc(msg)+'</p>':'');
   const n=id&&document.getElementById(id);if(n&&val!=null){n.value=val;n.focus()}
   const g=$('#gin');if(g){g.value=gtext;g.focus()}
   const mg=$('#msgs');if(mg)mg.scrollTop=mg.scrollHeight;
@@ -181,7 +201,7 @@ function keepNick(){const n=$('#nick');if(n)me={...(me||{}),nick:n.value}}
 function saveProfile(){run(async()=>{const n=$('#nick').value.trim();if(!n)throw new Error('Poné un apodo');
   me={played:0,won:0,streak:0,best:0,qsTotal:0,wins:0,fast:99,hist:[],cc:[],...(me||{}),nick:n,emoji:sEmoji,color:sColor,acc:sAcc};applyAcc();play('edit');await pRef().set(me);view='menu';render()})}
 function vMenu(){return `<h1>🎭 ¿Qué personaje soy?</h1><div style="text-align:center">${av(me)}</div><p class="sub">Hola, ${esc(me.nick)}</p>
-<button class="big" onclick="go('play')">🎮 Jugar</button><button class="big sec" onclick="go('profile')">👤 Perfil</button><button class="big sec" onclick="go('shop')">🛍️ Tienda · 🪙 ${me.coins||0}</button>`}
+<div class="menu"><button class="big" onclick="go('play')">🎮 Jugar</button><button class="big sec" onclick="go('profile')">👤 Perfil</button><button class="big sec" onclick="go('shop')">🛍️ Tienda · 🪙 ${me.coins||0}</button></div>`}
 function vProfile(){
   const avg=me.wins?(me.qsTotal/me.wins).toFixed(1):'–';
   const logros=[[me.won>=1,'🏆 Primera victoria'],[me.fast<=3,'⚡ Adiviné en 3 preguntas o menos'],[me.best>=3,'🔥 Racha de 3 victorias'],[me.played>=10,'🎉 10 partidas jugadas']];
@@ -194,7 +214,7 @@ function vProfile(){
 function toggleTheme(){const d=document.documentElement,dark=d.dataset.theme==='dark'||(!d.dataset.theme&&matchMedia('(prefers-color-scheme:dark)').matches);d.dataset.theme=dark?'light':'dark'}
 /* ---------- jugar / crear / unirse ---------- */
 function vPlay(){return `<button class="back" onclick="go('menu')">← Volver</button><h1>Jugar</h1><p class="sub">De 2 a 6 jugadores</p>
-<button class="big" onclick="go('create')">➕ Crear partida</button><button class="big sec" onclick="go('join')">🔑 Unirse</button>`}
+<div class="menu"><button class="big" onclick="go('create')">➕ Crear partida</button><button class="big sec" onclick="go('join')">🔑 Unirse</button></div>`}
 const pd=()=>({name:me.nick,emoji:me.emoji,color:me.color||COL[0],bn:(me.eq||{}).bn||'',fx:(me.eq||{}).fx||'confetti',lives:2,total:0,qs:0,done:'',score:0,doneAt:0});
 const av=p=>`<span class="av" style="background:${esc(p.color||COL[0])}">${esc(p.emoji)}</span>`;
 function sel(){if(mode==='default')return{cats:Object.keys(CATS),cc:{}};
@@ -275,13 +295,13 @@ ${isHost?'<button onclick="startGame(false)">➡️ Siguiente ronda</button>':'<
 ${isHost?'<button onclick="rematch()">🔁 Revancha</button>':'<p class="sub">El host puede iniciar la revancha</p>'}<button class="sec" onclick="leaveRoom()">Salir</button>`}
   const m=P(uid),mine=room.turn===uid&&!m.done,tp=P(room.turn);
   return `<div class="mut" style="text-align:center">Sala ${esc(code)}</div>
-<div class="turn">${m.done?(m.done==='win'?'🎉 ¡Adivinaste! Sos espectador':(m.done==='out'?'🖤 Te quedaste sin corazones. Sos espectador':'Te rendiste. Sos espectador')):mine?'👉 ¡Es tu turno! Hacé tu pregunta en voz alta':'Turno de '+esc(tp.emoji||'')+' '+esc(tp.name||'…')}</div>
-<div class="card" style="text-align:center"><div class="mut">Tu personaje</div>${m.done?`<div class="ch">${esc(room.chars[uid])}</div>`:'<div class="q">❓</div>'}${room.hint&&!m.done?`<span class="tag">💡 ${esc((room.cat||{})[uid]||'')}</span>`:''}<div class="hearts">${hearts(m)}</div><div class="mut">Ronda ${room.round}/${room.rounds} · Preguntas usadas: ${m.qs||0}</div></div>
-<h2>Los demás</h2>${players.filter(p=>p.id!==uid).map(p=>`<div class="card pl ${bnc(p)}">${av(p)}<span class="n">${esc(p.name)} ${hearts(p)}<div class="ch">${esc(room.chars[p.id])}</div></span>${p.done?`<span class="tag">${p.done==='win'?'✔ adivinó':p.done==='out'?'🖤 eliminado':'se rindió'}</span>`:''}</div>`).join('')}
-${mine?(guessing?`<div class="card"><input id="gin" placeholder="Creo que soy…" oninput="gtext=this.value" onkeydown="if(event.key==='Enter')guess()"><button onclick="guess()">Confirmar</button><button class="sec" onclick="guessing=false;render()">Cancelar</button></div>`
+<div class="play"><div class="turn">${m.done?(m.done==='win'?'🎉 ¡Adivinaste! Sos espectador':(m.done==='out'?'🖤 Te quedaste sin corazones. Sos espectador':'Te rendiste. Sos espectador')):mine?'👉 ¡Es tu turno! Hacé tu pregunta en voz alta':'Turno de '+esc(tp.emoji||'')+' '+esc(tp.name||'…')}</div>
+<div class="card mine" style="text-align:center"><div class="mut">Tu personaje</div>${m.done?`<div class="ch">${esc(room.chars[uid])}</div>`:'<div class="q">❓</div>'}${room.hint&&!m.done?`<span class="tag">💡 ${esc((room.cat||{})[uid]||'')}</span>`:''}<div class="hearts">${hearts(m)}</div><div class="mut">Ronda ${room.round}/${room.rounds} · Preguntas usadas: ${m.qs||0}</div></div>
+<div class="oth"><h2>Los demás</h2>${players.filter(p=>p.id!==uid).map(p=>`<div class="card pl ${bnc(p)}">${av(p)}<span class="n">${esc(p.name)} ${hearts(p)}<div class="ch">${esc(room.chars[p.id])}</div></span>${p.done?`<span class="tag">${p.done==='win'?'✔ adivinó':p.done==='out'?'🖤 eliminado':'se rindió'}</span>`:''}</div>`).join('')}</div>
+<div class="act">${mine?(guessing?`<div class="card"><input id="gin" placeholder="Creo que soy…" oninput="gtext=this.value" onkeydown="if(event.key==='Enter')guess()"><button onclick="guess()">Confirmar</button><button class="sec" onclick="guessing=false;render()">Cancelar</button></div>`
 :`<button onclick="passTurn()">✅ Ya me respondieron (pasar turno)</button><button class="sec" onclick="guessing=true;gtext='';render()">🤔 Creo que soy…</button>`):''}
 ${!m.done?'<button class="back" onclick="giveUp()">Me rindo</button>':''}${isHost&&room.turn&&!P(room.turn).done?'<button class="back" onclick="skipTurn()">Saltear turno de '+esc(tp.name||'')+' (host)</button>':''}
-<button class="back" onclick="leaveRoom()">Salir de la sala</button><div style="height:70px"></div>`;
+<button class="back" onclick="leaveRoom()">Salir de la sala</button></div></div><div style="height:70px"></div>`;
 }
 function startGame(first){run(async()=>{
   const seen=new Set(),all=[...room.cats.filter(c=>CATS[c]).flatMap(c=>CATS[c].map(n=>[n,c])),...Object.entries(room.cc||{}).flatMap(([c,a])=>a.map(n=>[n,c]))].filter(([n])=>{const k=norm(n);if(seen.has(k))return false;seen.add(k);return true});
@@ -313,6 +333,7 @@ function giveUp(){if(!confirm('¿Seguro que te rendís?'))return;run(async()=>{
   if(wasTurn)await rRef(code).update({turn:nextAfter(uid,[uid])})})}
 function skipTurn(){run(async()=>{await rRef(code).update({turn:nextAfter(room.turn,[])})})}
 document.addEventListener('click',e=>{if(e.target.closest('button,.chip,.dot'))play('click')});
+const wide=()=>matchMedia('(min-width:900px)').matches;matchMedia('(min-width:900px)').addEventListener('change',()=>render());
 init();
 </script>
 </body>
