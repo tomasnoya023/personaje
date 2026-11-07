@@ -4,6 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>¿Qué personaje soy?</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,700;12..96,800&family=Figtree:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
 :root{box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px);
 --bg:#faf7ff;--card:#fff;--tx:#201b2e;--mut:#6f6785;--pri:#7c3aed;--prt:#fff;--bd:#e4dcf5;--ok:#16a34a;--bad:#dc2626}
@@ -94,53 +95,132 @@ button:hover{filter:brightness(1.08)}.chip:hover{transform:translateY(-2px)}
 .play .oth{grid-column:2;grid-row:2/4;display:grid;grid-template-columns:1fr 1fr;gap:10px;align-content:start}
 .oth h2{grid-column:1/-1;margin:0}.oth .card{margin:0}}
 </style>
+<style>
+:root{--bg:#f2f3fb;--card:#fff;--tx:#14183a;--mut:#5d6282;--bd:#dfe2f1;--bad:#e5394f}
+@media(prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0e1124;--card:#181c3a;--tx:#eef0ff;--mut:#a0a6cc;--bd:#2b3060}}
+:root[data-theme="dark"]{--bg:#0e1124;--card:#181c3a;--tx:#eef0ff;--mut:#a0a6cc;--bd:#2b3060}
+body{background:var(--bg);font:16px/1.45 Figtree,system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+h1,h2,.code,.ch,.stat b,.turn,button.big span,.who span{font-family:'Bricolage Grotesque',Figtree,system-ui,sans-serif}
+h1{background:none;color:var(--tx);-webkit-text-fill-color:currentColor;font-weight:800;letter-spacing:-.02em;line-height:1.08;font-size:32px;margin:14px 0 6px}
+h1 .av{vertical-align:middle;width:52px;height:52px;margin-right:6px}
+h2{font-size:15px;font-weight:700;margin:22px 0 8px;color:var(--mut)}
+.card{border-radius:18px;box-shadow:none;animation:none;padding:16px}
+button{font-weight:700;border-radius:12px;padding:14px 16px;box-shadow:0 3px 0 color-mix(in srgb,var(--pri) 62%,#000)}
+button.sec{background:var(--card);color:var(--tx);border:2px solid var(--bd);box-shadow:0 3px 0 var(--bd)}
+button.back{background:none;color:var(--mut);box-shadow:none;border:0}
+button:disabled{box-shadow:none}
+button.big{display:flex;flex-direction:column;align-items:flex-start;gap:4px;padding:20px 18px;font-size:22px;text-align:left}
+button.big small{font:500 14px Figtree,system-ui,sans-serif;opacity:.85}
+.chip{border-radius:10px;font-weight:600;font-size:14px;padding:7px 12px}
+.chip.avc{padding:4px;border-radius:50%;line-height:0}.chip.avc img{width:46px;height:46px;object-fit:contain}
+.av{width:46px;height:46px;overflow:hidden;font-size:0}.av img{width:100%;height:100%;object-fit:contain;display:block}
+.fan{display:flex;justify-content:center;margin:12px 0 20px}
+.fan img{width:76px;height:76px;object-fit:contain;padding:8px;background:var(--card);border:1px solid var(--bd);border-radius:16px;margin:0 -9px;transform:translateY(calc((var(--i) - 2)*(var(--i) - 2)*5px)) rotate(calc((var(--i) - 2)*8deg));box-shadow:0 6px 14px rgba(20,24,58,.10)}
+.who{display:flex;align-items:center;gap:10px;justify-content:center;margin:0 0 18px;font-weight:700;font-size:20px}
+.cn{display:inline-block;width:.95em;height:.95em;border-radius:50%;background:radial-gradient(circle at 35% 30%,#ffe58a,#f5b301 62%,#c98a00);box-shadow:inset 0 0 0 .1em #c98a00;vertical-align:-.12em}
+.hr{display:inline-block;width:1.1em;height:1.1em;vertical-align:-.2em;background:var(--bad);-webkit-mask:url(assets/suit_hearts.png) center/contain no-repeat;mask:url(assets/suit_hearts.png) center/contain no-repeat}
+.hr.b{-webkit-mask-image:url(assets/suit_hearts_broken.png);mask-image:url(assets/suit_hearts_broken.png)}.hr.z{background:var(--bd)}.cf .hr{background:currentColor}
+.tg{display:inline-block;width:26px;height:26px;vertical-align:-7px;margin-right:4px;background:var(--mut);-webkit-mask:center/contain no-repeat;mask:center/contain no-repeat}.tg.g{background:#f5b301}
+.hearts{animation:none}
+.mine{border:0;color:#fff;background:var(--pri) repeating-linear-gradient(45deg,rgba(255,255,255,.08) 0 10px,transparent 10px 20px);padding:20px 16px}
+.mine .mut{color:#fff;opacity:.85}.mine .tag{background:rgba(255,255,255,.2);color:#fff}.mine .hr{background:#ffb3c0}.mine .hr.z{background:rgba(255,255,255,.35)}
+.eyes{display:flex;justify-content:center;gap:10px;margin:10px 0 12px}
+.eye{position:relative;width:76px;height:76px}.eye img,.pu img{position:absolute;inset:0;width:100%;height:100%}.pu{position:absolute;inset:0;transition:transform .08s linear}
+.ch{font-size:26px;letter-spacing:-.01em}
+.turn{border-radius:14px;text-align:left;padding:14px 16px;animation:none;font-size:17px}
+.code{font-size:48px;letter-spacing:.12em;background:var(--card);border:2px dashed var(--bd);border-radius:18px;padding:10px 0 10px .12em;margin:8px 0}
+.stat b{font-size:30px}.pl{gap:12px}.tag{font-weight:600}
+.fab{width:auto;height:48px;padding:0 20px;border-radius:99px;font-size:15px}.chat{border-radius:20px}
+:focus-visible{outline:3px solid color-mix(in srgb,var(--pri) 60%,transparent);outline-offset:2px}
+input:focus,textarea:focus{outline:3px solid color-mix(in srgb,var(--pri) 45%,transparent);border-color:var(--pri)}
+.cf.bit{width:10px;height:16px;border-radius:2px;font-size:0}
+.cf.sp{width:8px;height:8px;border-radius:50%;background:currentColor;box-shadow:0 -22px,22px 0,0 22px,-22px 0,16px 16px,-16px -16px,16px -16px,-16px 16px}
+.crown{font-size:0;width:120px;height:90px}.crown svg{width:100%}
+</style>
+<style>
+.tabs{margin:14px 0}
+.sq{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}.sq .card{margin:0;text-align:center}
+.pv{display:flex;justify-content:center;align-items:center;gap:6px;height:84px;margin-bottom:6px}.pv>img{height:72px;width:auto}.pv .eyes{margin:0}.pv .eye,.pv .gl{width:56px;height:56px}.pv>img.gl{height:56px}.pv img.emp{height:56px}
+.gl{width:76px;height:76px;animation:wob 2.4s ease-in-out infinite alternate}@keyframes wob{to{transform:rotate(8deg)}}
+.lock img{filter:grayscale(1);opacity:.35}
+.emr{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:8px}.emr .em{width:42px;height:42px;padding:0;margin:0;border-radius:10px;background:var(--bg);box-shadow:none;border:1px solid var(--bd);display:grid;place-items:center}.emr .em img{height:26px}
+.emi{height:30px;vertical-align:middle}.emf{width:52px;height:auto}
+@media(min-width:900px){.sq{grid-template-columns:repeat(3,1fr)}}
+</style>
+<style>.ic{display:inline-block;width:1.2em;height:1.2em;vertical-align:-.22em;margin-right:.4em;background:currentColor;-webkit-mask:var(--i) center/contain no-repeat;mask:var(--i) center/contain no-repeat}
+.turn .ic{width:1.4em;height:1.4em}h1 .ic{width:.9em;height:.9em;margin-right:.3em;vertical-align:-.1em;color:#f5b301}button.big span .ic{width:1.1em;height:1.1em}
+.chip.avc{position:relative}.chip.lock::after{content:'';position:absolute;right:-3px;bottom:-3px;width:22px;height:22px;background:var(--tx);-webkit-mask:url(assets/icons/lock_closed.png) center/contain no-repeat;mask:url(assets/icons/lock_closed.png) center/contain no-repeat}
+</style>
 </head>
 <body>
 <div id="app"><p class="sub">Cargando…</p></div>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.js"></script>
 <script>
 const CATS={
-"🌟 Famosos":["Shakira","Taylor Swift","Bad Bunny","Beyoncé","Rihanna","Dua Lipa","Cristiano Ronaldo","Neymar","Michael Jackson","Justin Bieber","Billie Eilish","Ariana Grande","Selena Gomez","Zendaya","Tom Holland","Will Smith","Dwayne Johnson","Kim Kardashian","Harry Styles","Ed Sheeran","Lady Gaga","Madonna","Bruno Mars","Karol G","MrBeast"],
-"🇦🇷 Argentina":["Lionel Messi","Diego Maradona","Susana Giménez","Evita Perón","Mirtha Legrand","Tini Stoessel","Lali Espósito","Duki","Wos","Nicki Nicole","Dibu Martínez","Ricardo Darín","Charly García","Gustavo Cerati","Luis Alberto Spinetta","Moria Casán","Marcelo Tinelli","Guillermo Francella","Pampita","Wanda Nara","La Mona Jiménez","Lionel Scaloni","Fito Páez","María Becerra","Paulo Londra","Ángel Di María","Sergio Agüero","Papa Francisco","Nathy Peluso","Coscu"],
-"✏️ Dibujos":["Bob Esponja","Patricio Estrella","Calamardo","Homero Simpson","Bart Simpson","Mickey Mouse","Pato Donald","Goku","Pikachu","Naruto","Doraemon","Shin Chan","Tom","Jerry","Bugs Bunny","Scooby-Doo","Mafalda","Dora la exploradora","Peppa Pig","Stitch","Simba","Elsa","Rapunzel","Garfield","Snoopy","Hello Kitty","El Chavo del 8","Cartman","Coraje el perro cobarde","Ben 10"],
-"📺 Series":["Walter White","Eleven","Rachel Green","Joey Tribbiani","Phoebe Buffay","Chandler Bing","Sheldon Cooper","Michael Scott","Tyrion Lannister","Daenerys Targaryen","Jon Snow","Wednesday Addams","Eddie Munson","Tokio","El Profesor","Berlín","Rick Sanchez","Dexter","Sherlock Holmes","Dr. House","Barney Stinson","Tommy Shelby","Cersei Lannister","Joe Goldberg","Peter Griffin"],
-"🎬 Películas":["Harry Potter","Hermione Granger","Shrek","Burro","Jack Sparrow","Darth Vader","Yoda","Spider-Man","Iron Man","Batman","Joker","Thanos","Barbie","Ken","Forrest Gump","Rose (Titanic)","Rocky Balboa","Indiana Jones","Gollum","Gandalf","Moana","Nemo","Woody","Buzz Lightyear","Hulk","Capitán América","Terminator","Gru"],
-"🐾 Animales":["Pingüino","Jirafa","Pulpo","Perezoso","Carpincho","Flamenco","Camaleón","Koala","Delfín","Murciélago","Lobo","Zorro","Elefante","León","Tigre","Panda","Canguro","Pato","Tortuga","Oso polar","Mono","Cocodrilo","Búho","Loro","Gato","Perro"]};
-const EM=["😎","🦊","🐸","👾","🦄","🐙","🔥","🌈","🍕","👻","🐼","🍩","🐯","🤖","🦋","🍓"];
+"Famosos":["Shakira","Taylor Swift","Bad Bunny","Beyoncé","Rihanna","Dua Lipa","Cristiano Ronaldo","Neymar","Michael Jackson","Justin Bieber","Billie Eilish","Ariana Grande","Selena Gomez","Zendaya","Tom Holland","Will Smith","Dwayne Johnson","Kim Kardashian","Harry Styles","Ed Sheeran","Lady Gaga","Madonna","Bruno Mars","Karol G","MrBeast"],
+"Argentina":["Lionel Messi","Diego Maradona","Susana Giménez","Evita Perón","Mirtha Legrand","Tini Stoessel","Lali Espósito","Duki","Wos","Nicki Nicole","Dibu Martínez","Ricardo Darín","Charly García","Gustavo Cerati","Luis Alberto Spinetta","Moria Casán","Marcelo Tinelli","Guillermo Francella","Pampita","Wanda Nara","La Mona Jiménez","Lionel Scaloni","Fito Páez","María Becerra","Paulo Londra","Ángel Di María","Sergio Agüero","Papa Francisco","Nathy Peluso","Coscu"],
+"Dibujos":["Bob Esponja","Patricio Estrella","Calamardo","Homero Simpson","Bart Simpson","Mickey Mouse","Pato Donald","Goku","Pikachu","Naruto","Doraemon","Shin Chan","Tom","Jerry","Bugs Bunny","Scooby-Doo","Mafalda","Dora la exploradora","Peppa Pig","Stitch","Simba","Elsa","Rapunzel","Garfield","Snoopy","Hello Kitty","El Chavo del 8","Cartman","Coraje el perro cobarde","Ben 10"],
+"Series":["Walter White","Eleven","Rachel Green","Joey Tribbiani","Phoebe Buffay","Chandler Bing","Sheldon Cooper","Michael Scott","Tyrion Lannister","Daenerys Targaryen","Jon Snow","Wednesday Addams","Eddie Munson","Tokio","El Profesor","Berlín","Rick Sanchez","Dexter","Sherlock Holmes","Dr. House","Barney Stinson","Tommy Shelby","Cersei Lannister","Joe Goldberg","Peter Griffin"],
+"Películas":["Harry Potter","Hermione Granger","Shrek","Burro","Jack Sparrow","Darth Vader","Yoda","Spider-Man","Iron Man","Batman","Joker","Thanos","Barbie","Ken","Forrest Gump","Rose (Titanic)","Rocky Balboa","Indiana Jones","Gollum","Gandalf","Moana","Nemo","Woody","Buzz Lightyear","Hulk","Capitán América","Terminator","Gru"],
+"Animales":["Pingüino","Jirafa","Pulpo","Perezoso","Carpincho","Flamenco","Camaleón","Koala","Delfín","Murciélago","Lobo","Zorro","Elefante","León","Tigre","Panda","Canguro","Pato","Tortuga","Oso polar","Mono","Cocodrilo","Búho","Loro","Gato","Perro"]};
+const AN=['panda', 'penguin', 'parrot', 'giraffe', 'monkey', 'pig', 'rabbit', 'hippo', 'elephant', 'snake'],EM=AN;
+const CN='<i class="cn"></i>';
+const ic=n=>'<i class="ic" style="--i:url(assets/icons/'+n+'.png)"></i>';
+const FREE=['panda','pig','rabbit','penguin'];
+const AVS=[['monkey','Mono',200],['parrot','Loro',250],['giraffe','Jirafa',300],['hippo','Hipopótamo',350],['elephant','Elefante',400],['snake','Serpiente',500]].map(([k,n,p])=>({id:'av_'+k,k,n,p}));
+const EYS=[{id:'',k:'',n:'Seguidor',p:0}].concat([['a','Atento',150],['b','Sospechoso',150],['c','Soñador',200],['d','Fijo',200],['e','Pícaro',250]].map(([k,n,p])=>({id:'eye_'+k,k,n,p})));
+const EMS=[['faceHappy','Feliz',0],['question','Duda',0],['laugh','Jajaja',100],['heart','Corazón',100],['faceSad','Triste',100],['faceAngry','Enojo',100],['star','Estrella',150],['idea','Idea',150],['music','Música',150],['cash','Dinero',200]].map(([k,n,p])=>({id:'em_'+k,k,n,p}));
+const avOK=a=>FREE.includes(a)||!!(me&&(me.owned||[]).includes('av_'+a)),emOK=x=>x.p===0||!!(me&&(me.owned||[]).includes(x.id));
+function floatEm(k){if(!EMS.some(x=>x.k===k))return;const e=document.createElement('span');e.className='cf';e.innerHTML='<img class="emf" src="assets/emotes/'+k+'.png" alt="">';e.style.cssText='left:'+(10+Math.random()*75)+'vw;top:100vh;animation:rise 2.6s ease-out forwards';document.body.appendChild(e);setTimeout(()=>e.remove(),2800)}
+function sendEm(k){if(chCh)chCh.send({type:'broadcast',event:'m',payload:{u:uid,n:me.nick,t:'',em:k}})}
+function eyes(){const k=((me.eq||{}).eye||'').replace('eye_','');return k?'<div class="eyes">'+('<img class="gl" src="assets/eyes/googly-'+k+'.png" alt="">').repeat(2)+'</div>':eyes()}
+const CROWN='<svg viewBox="0 0 64 48"><path d="M4 40 8 12 22 26 32 6 42 26 56 12 60 40Z" fill="#ffc83d" stroke="#b9770e" stroke-width="3" stroke-linejoin="round"/><rect x="6" y="40" width="52" height="6" rx="2" fill="#e8a317"/></svg>';
+const CROWN_S=CROWN.replace('<svg','<svg width="24" height="18" style="vertical-align:-3px;margin-right:4px"');
+const EYES='<div class="eyes">'+'<span class="eye"><img src="assets/eyes/0.png" alt=""><span class="pu"><img src="assets/eyes/1.png" alt=""><img src="assets/eyes/2.png" alt=""></span></span>'.repeat(2)+'</div>';
+const rk=(i,p)=>(i===0&&p.fx==='crown'&&p.total?CROWN_S:'')+'<i class="tg'+(i===0?' g':'')+'" style="-webkit-mask-image:url(assets/tag_'+(i+1)+'.png);mask-image:url(assets/tag_'+(i+1)+'.png)"></i>';
 const COL=["#7c3aed","#ec4899","#0ea5e9","#16a34a","#f97316","#eab308","#14b8a6","#64748b"],ACC=["#7c3aed","#ec4899","#0ea5e9","#16a34a","#f97316","#e11d48"];
 const $=s=>document.querySelector(s),app=$('#app');
-const BN=[{id:'gold',n:'Dorado ✨',p:300},{id:'neon',n:'Neón 💗',p:400},{id:'ice',n:'Hielo ❄️',p:500},{id:'rainbow',n:'Arcoíris 🌈',p:600},{id:'fire',n:'Fuego 🔥',p:800},{id:'galaxy',n:'Galaxia 🌌',p:1000}];
-const FX=[{id:'confetti',n:'Confeti 🎉',p:0},{id:'hearts',n:'Corazones 💖',p:300},{id:'crown',n:'Corona 👑',p:400},{id:'rain',n:'Lluvia de monedas 🪙',p:500},{id:'fireworks',n:'Fuegos artificiales 🎆',p:700}];
+const BN=[{id:'gold',n:'Dorado',p:300},{id:'neon',n:'Neón',p:400},{id:'ice',n:'Hielo',p:500},{id:'rainbow',n:'Arcoíris',p:600},{id:'fire',n:'Fuego',p:800},{id:'galaxy',n:'Galaxia',p:1000}];
+const FX=[{id:'confetti',n:'Confeti',p:0},{id:'hearts',n:'Corazones',p:300},{id:'crown',n:'Corona',p:400},{id:'rain',n:'Lluvia de monedas',p:500},{id:'fireworks',n:'Fuegos artificiales',p:700}];
 const bnc=p=>p.bn&&BN.some(x=>x.id===p.bn)?'bn bn-'+p.bn:'';
 const own=id=>(me.owned||[]).includes(id);
 function toast(t){const s=document.createElement('div');s.className='toast';s.textContent=t;document.body.appendChild(s);setTimeout(()=>s.remove(),2100)}
-function coin(n){me.coins=(me.coins||0)+n;pRef().set(me).catch(()=>{});toast('+'+n+' 🪙');setTimeout(()=>play('coins'),700)}
+function coin(n){me.coins=(me.coins||0)+n;pRef().set(me).catch(()=>{});toast('+'+n+' monedas');setTimeout(()=>play('coins'),700)}
 function finishFx(){const w=[...players].sort((a,b)=>(b.total||0)-(a.total||0))[0];if(w&&w.total>0)confetti(w.fx||'confetti');else play('lose')}
-function buy(t,id){run(async()=>{const it=(t==='bn'?BN:FX).find(x=>x.id===id);if((me.coins||0)<it.p)throw new Error('Te faltan monedas 🪙');
-  me.coins-=it.p;me.owned=[...(me.owned||[]),id];me.eq={...(me.eq||{}),[t]:id};play('edit');await pRef().set(me);render()})}
-function equip(t,id){run(async()=>{me.eq={...(me.eq||{}),[t]:id};play('equip');await pRef().set(me);render()})}
-function vShop(){const e=me.eq||{};
-  const btn=(t,x)=>own(x.id)||x.p===0?(e[t]===x.id||(!e[t]&&x.p===0&&t==='fx')?'<span class="tag">Equipado ✓</span>':`<button class="sm" onclick="equip('${t}','${x.id}')">Equipar</button>`):`<button class="sm" onclick="buy('${t}','${x.id}')">🪙 ${x.p}</button>`;
-  return `<button class="back" onclick="go('menu')">← Volver</button><h1>🛍️ Tienda</h1><p class="sub">Tenés <b>🪙 ${me.coins||0}</b> · +100 por adivinar · +500 por ganar</p>
-<h2>Banners</h2><div class="card"><div class="row" style="justify-content:space-between"><b>Sin banner</b>${e.bn?`<button class="sm sec" onclick="equip('bn','')">Equipar</button>`:'<span class="tag">Equipado ✓</span>'}</div></div>
-<div class="shopg">${BN.map(x=>`<div class="card"><div class="pl bn bn-${x.id}">${av(me)}<span class="n">${esc(me.nick)}</span></div><div class="row" style="justify-content:space-between"><b>${x.n}</b>${btn('bn',x)}</div></div>`).join('')}</div>
-<h2>Efectos de victoria</h2><div class="shopg">${FX.map(x=>`<div class="card"><div class="row" style="justify-content:space-between"><b>${x.n}</b><span class="row"><button class="sm sec" onclick="confetti('${x.id}')">Probar</button>${btn('fx',x)}</span></div></div>`).join('')}</div>`}
+let shopTab='bn';
+const TABS=[['bn','Banners'],['fx','Efectos'],['av','Avatares'],['eye','Ojos'],['em','Emotes']],LIST=()=>({bn:BN,fx:FX,av:AVS,eye:EYS,em:EMS});
+function applyEq(t,it){if(t==='em')return;if(t==='av')me.emoji=it.k;else me.eq={...(me.eq||{}),[t]:it.id}}
+function buy(t,id){run(async()=>{const it=LIST()[t].find(x=>x.id===id);if((me.coins||0)<it.p)throw new Error('Te faltan monedas');
+  me.coins-=it.p;me.owned=[...(me.owned||[]),id];applyEq(t,it);play('edit');await pRef().set(me);render()})}
+function equip(t,id){run(async()=>{applyEq(t,LIST()[t].find(x=>x.id===id)||{id:'',k:''});play('equip');await pRef().set(me);render()})}
+function vShop(){const e=me.eq||{},L=LIST()[shopTab];
+  const has=x=>x.p===0||own(x.id),on=x=>({bn:(e.bn||'')===x.id,fx:(e.fx||'confetti')===x.id,av:me.emoji===x.k,eye:(e.eye||'')===x.id,em:true})[shopTab];
+  const btn=x=>has(x)?(on(x)?'<span class="tag">'+(shopTab==='em'?'Tuyo':'Equipado')+'</span>':`<button class="sm" onclick="equip('${shopTab}','${x.id}')">Equipar</button>`):`<button class="sm" onclick="buy('${shopTab}','${x.id}')">${CN} ${x.p}</button>`;
+  const pv=x=>shopTab==='av'?`<img src="assets/animals/${x.k}.png" alt="">`:shopTab==='em'?`<img class="emp" src="assets/emotes/${x.k}.png" alt="">`:shopTab==='eye'?(x.k?`<img class="gl" src="assets/eyes/googly-${x.k}.png" alt=""><img class="gl" src="assets/eyes/googly-${x.k}.png" alt="">`:EYES):'';
+  const body=shopTab==='bn'?`<div class="card"><div class="row" style="justify-content:space-between"><b>Sin banner</b>${e.bn?`<button class="sm sec" onclick="equip('bn','')">Equipar</button>`:'<span class="tag">Equipado</span>'}</div></div>
+<div class="shopg">${L.map(x=>`<div class="card"><div class="pl bn bn-${x.id}">${av(me)}<span class="n">${esc(me.nick)}</span></div><div class="row" style="justify-content:space-between"><b>${x.n}</b>${btn(x)}</div></div>`).join('')}</div>`
+  :`<div class="sq">${L.map(x=>`<div class="card"><div class="pv">${pv(x)}</div><b>${x.n}</b>${shopTab==='fx'?`<button class="sm sec" style="width:100%;margin-top:8px" onclick="confetti('${x.id}')">Probar</button>`:''}<div style="margin-top:8px">${btn(x)}</div></div>`).join('')}</div>`;
+  return `<button class="back" onclick="go('menu')">← Volver</button><h1>Tienda</h1><p class="sub">Tenés <b>${CN} ${me.coins||0}</b> · +100 por adivinar · +500 por ganar</p>
+<div class="chips tabs">${TABS.map(([k,n])=>`<span class="chip ${k===shopTab?'on':''}" onclick="shopTab='${k}';render()">${n}</span>`).join('')}</div>${body}`}
 function confetti(fx){fx=fx||(me&&me.eq&&me.eq.fx)||'confetti';play('win');
-  const S={confetti:[['🎉','✨','🎊','⭐','💜'],'fall'],rain:[['🪙'],'fall'],hearts:[['💖','💗','💕'],'rise'],fireworks:[['🎆','🎇','✨','💥'],'boom'],crown:[['✨','🎉','👑'],'fall']}[fx]||[['🎉'],'fall'];
-  const add=(t,css,cls)=>{const s=document.createElement('span');s.className=cls;s.textContent=t;s.style.cssText=css;document.body.appendChild(s);setTimeout(()=>s.remove(),4200)};
-  for(let i=0;i<(S[1]==='boom'?14:36);i++){const e=S[0][i%S[0].length],d=(Math.random()*.9)+'s',x=Math.random()*100;
-    add(e,S[1]==='boom'?`left:${10+x*.8}vw;top:${10+Math.random()*60}vh;animation:boom 1.2s ${d} both`:S[1]==='rise'?`left:${x}vw;top:105vh;animation:rise ${2.5+Math.random()}s ${d} ease-out forwards`:`left:${x}vw;animation-delay:${d}`,'cf')}
-  if(fx==='crown')add('👑','','crown')}
-const hearts=p=>['🖤','💔','❤️'][p.lives??2];
+  const add=(h,css,cls)=>{const e=document.createElement('span');e.className=cls;e.innerHTML=h;e.style.cssText=css;document.body.appendChild(e);setTimeout(()=>e.remove(),4200)};
+  const C=['#ff4d6d','#ffb703','#3a86ff','#2ec4b6','#8338ec','#fb5607'],k={rain:'c',hearts:'h',fireworks:'s'}[fx]||'b';
+  for(let i=0;i<(k==='s'?14:36);i++){const d=(Math.random()*.9)+'s',x=Math.random()*100,c=C[i%C.length];
+    if(k==='s')add('',`left:${10+x*.8}vw;top:${10+Math.random()*60}vh;color:${c};animation:boom 1.2s ${d} both`,'cf sp');
+    else if(k==='h')add('<i class="hr"></i>',`left:${x}vw;top:105vh;color:${c};animation:rise ${2.5+Math.random()}s ${d} ease-out forwards`,'cf');
+    else if(k==='c')add(CN,`left:${x}vw;animation-delay:${d}`,'cf');
+    else add('',`left:${x}vw;background:${c};animation-delay:${d}`,'cf bit')}
+  if(fx==='crown')add(CROWN,'','crown')}
+const hearts=p=>{const l=p.lives??2;return '<i class="hr '+(l>=2?'':l===1?'b':'z')+'"></i>'};
 async function endRound(){try{await Promise.all(players.map(p=>plRef(code,p.id).update({total:(p.total||0)+(p.score||0)})));await rRef(code).update({status:room.round>=room.rounds?'finished':'roundend'})}catch(e){adv=''}}
 let adv='',rounds=3,lastN=0,lastT='',snd=true,SND={};try{snd=localStorage.getItem('snd')!=='0'}catch(e){}
 function play(n){if(!snd)return;try{const a=SND[n]||(SND[n]=new Audio('sounds/'+n+'.mp3'));a.currentTime=0;a.play().catch(()=>{})}catch(e){}}
 function toggleSnd(){snd=!snd;try{localStorage.setItem('snd',snd?'1':'0')}catch(e){}render()}
 let sColor=COL[0],sAcc=0,ccSel=[],hint=false,nName='',nChars='',chCh=null,chat=[],chatOpen=false,unread=0;
 function applyAcc(i){const r=document.documentElement.style;r.setProperty('--pri',ACC[i??me.acc??0]);r.setProperty('--prt','#fff')}
-function startChat(c){chat=[];unread=0;chCh=sb.channel('chat-'+c,{config:{broadcast:{self:true}}}).on('broadcast',{event:'m'},({payload})=>{chat=[...chat,payload].slice(-80);if(payload.u!==uid)play('message');if(!chatOpen)unread++;if(view==='room')render()}).subscribe()}
+function startChat(c){chat=[];unread=0;chCh=sb.channel('chat-'+c,{config:{broadcast:{self:true}}}).on('broadcast',{event:'m'},({payload})=>{chat=[...chat,payload].slice(-80);if(payload.em)floatEm(payload.em);if(payload.u!==uid)play('message');if(!chatOpen)unread++;if(view==='room')render()}).subscribe()}
 function sendChat(){const i=$('#cin'),t=i&&i.value.trim();if(!t||!chCh)return;i.value='';chCh.send({type:'broadcast',event:'m',payload:{u:uid,n:me.nick,e:me.emoji,t}})}
-function chatUI(){return `<button class="fab" onclick="chatOpen=!chatOpen;unread=0;render()">${chatOpen?'✕':'💬'}${unread&&!chatOpen?`<i>${unread}</i>`:''}</button>`+(chatOpen||wide()?`<div class="chat"><div class="msgs" id="msgs">${chat.map(m=>`<div class="m ${m.u===uid?'me':''}"><b>${esc(m.e)} ${esc(m.n)}</b> ${esc(m.t)}</div>`).join('')||'<span class="mut">Escribí algo 👋</span>'}</div><div class="row"><input id="cin" maxlength="200" placeholder="Mensaje…" onkeydown="if(event.key==='Enter')sendChat()"><button class="sm" onclick="sendChat()">➤</button></div></div>`:'')}
+function chatUI(){return `<button class="fab" onclick="chatOpen=!chatOpen;unread=0;render()">${chatOpen?'Cerrar':'Chat'}${unread&&!chatOpen?`<i>${unread}</i>`:''}</button>`+(chatOpen||wide()?`<div class="chat"><div class="msgs" id="msgs">${chat.map(m=>`<div class="m ${m.u===uid?'me':''}"><b>${esc(m.n)}</b> ${m.em?`<img class="emi" src="assets/emotes/${esc(m.em)}.png" alt="">`:''}${esc(m.t)}</div>`).join('')||'<span class="mut">Escribí algo</span>'}</div><div class="emr">${EMS.filter(emOK).map(x=>`<button class="em" onclick="sendEm('${x.k}')"><img src="assets/emotes/${x.k}.png" alt="${x.n}"></button>`).join('')}</div><div class="row"><input id="cin" maxlength="200" placeholder="Mensaje…" onkeydown="if(event.key==='Enter')sendChat()"><button class="sm" onclick="sendChat()">Enviar</button></div></div>`:'')}
 const esc=s=>String(s??'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
 let db,user,uid,me,view='setup',code=null,room=null,players=[],unsubs=[],msg='',rec='',gtext='',guessing=false,sEmoji=EM[0];
 let mode='default',cats=Object.keys(CATS),custom=[],joinCode='';
@@ -175,7 +255,7 @@ function mkDb(){
 async function init(){
   let {data:{session}}=await sb.auth.getSession();
   if(!session){const r=await sb.auth.signInAnonymously();session=r.data&&r.data.session}
-  if(!session){app.innerHTML='<h1>🎭</h1><div class="card">No pude conectar con Supabase. Revisá la URL, la key y que estén activados los inicios de sesión anónimos.</div>';return}
+  if(!session){app.innerHTML='<div class="card">No pude conectar con Supabase. Revisá la URL, la key y que estén activados los inicios de sesión anónimos.</div>';return}
   db=mkDb();uid=session.user.id;
   const s=await pRef().get();
   if(s.exists){me=s.data();view='menu';applyAcc()}
@@ -191,46 +271,47 @@ function render(){
 }
 function go(v){view=v;msg='';render()}
 /* ---------- setup & perfil ---------- */
-function vSetup(){return `<h1>🎭</h1><h1>¿Qué personaje soy?</h1><p class="sub">Armá tu perfil</p>
+function vSetup(){return `<h1>¿Qué personaje soy?</h1><p class="sub">Armá tu perfil</p>
 <div class="card"><input id="nick" maxlength="14" placeholder="Tu apodo" value="${esc(me?.nick||'')}">
-<h2>Avatar</h2><div class="chips">${EM.map(e=>`<span class="chip ${e===sEmoji?'on':''}" onclick="sEmoji='${e}';keepNick();render()">${e}</span>`).join('')}</div>
+<h2>Avatar</h2><div class="chips">${EM.map(e=>`<span class="chip avc ${e===sEmoji?'on':''} ${avOK(e)?'':'lock'}" onclick="${avOK(e)?`sEmoji='${e}';keepNick();render()`:`toast('Desbloquealo en la tienda')`}"><img src="assets/animals/${e}.png" alt=""></span>`).join('')}</div>
 <h2>Color del avatar</h2><div class="chips">${COL.map(c=>`<span class="dot ${c===sColor?'on':''}" style="background:${c}" onclick="sColor='${c}';keepNick();render()"></span>`).join('')}</div>
 <h2>Color de la app</h2><div class="chips">${ACC.map((c,i)=>`<span class="dot ${i===sAcc?'on':''}" style="background:${c}" onclick="sAcc=${i};keepNick();applyAcc(${i});render()"></span>`).join('')}</div>
 <button onclick="saveProfile()">Guardar</button></div>`}
 function keepNick(){const n=$('#nick');if(n)me={...(me||{}),nick:n.value}}
 function saveProfile(){run(async()=>{const n=$('#nick').value.trim();if(!n)throw new Error('Poné un apodo');
   me={played:0,won:0,streak:0,best:0,qsTotal:0,wins:0,fast:99,hist:[],cc:[],...(me||{}),nick:n,emoji:sEmoji,color:sColor,acc:sAcc};applyAcc();play('edit');await pRef().set(me);view='menu';render()})}
-function vMenu(){return `<h1>🎭 ¿Qué personaje soy?</h1><div style="text-align:center">${av(me)}</div><p class="sub">Hola, ${esc(me.nick)}</p>
-<div class="menu"><button class="big" onclick="go('play')">🎮 Jugar</button><button class="big sec" onclick="go('profile')">👤 Perfil</button><button class="big sec" onclick="go('shop')">🛍️ Tienda · 🪙 ${me.coins||0}</button></div>`}
+function vMenu(){return `<div class="fan">${['panda','pig','parrot','giraffe','penguin'].map((a,i)=>`<img src="assets/animals/${a}.png" style="--i:${i}" alt="">`).join('')}</div><h1>¿Qué personaje soy?</h1><p class="sub">Adiviná quién sos con preguntas de sí o no.</p>
+<div class="who">${av(me)}<span>${esc(me.nick)}</span></div>
+<div class="menu"><button class="big" onclick="go('play')"><span>${ic('cards_fan')}Jugar</span><small>Crear una sala o entrar con un código</small></button><button class="big sec" onclick="go('profile')"><span>${ic('pawn')}Perfil</span><small>Estadísticas, logros y ajustes</small></button><button class="big sec" onclick="go('shop')"><span>${ic('pouch')}Tienda</span><small>${CN} ${me.coins||0} monedas</small></button></div>`}
 function vProfile(){
   const avg=me.wins?(me.qsTotal/me.wins).toFixed(1):'–';
-  const logros=[[me.won>=1,'🏆 Primera victoria'],[me.fast<=3,'⚡ Adiviné en 3 preguntas o menos'],[me.best>=3,'🔥 Racha de 3 victorias'],[me.played>=10,'🎉 10 partidas jugadas']];
-  return `<button class="back" onclick="go('menu')">← Volver</button><h1>${esc(me.emoji)} ${esc(me.nick)}</h1>
+  const logros=[[me.won>=1,'Primera victoria','crown_a'],[me.fast<=3,'Adiviné en 3 preguntas o menos','hourglass'],[me.best>=3,'Racha de 3 victorias','fire'],[me.played>=10,'10 partidas jugadas','cards_fan']];
+  return `<button class="back" onclick="go('menu')">← Volver</button><h1>${av(me)} ${esc(me.nick)}</h1>
 <div class="grid"><div class="card stat"><b>${me.played}</b><span>Partidas</span></div><div class="card stat"><b>${me.won}</b><span>Ganadas</span></div>
 <div class="card stat"><b>${avg}</b><span>Preguntas promedio</span></div><div class="card stat"><b>${me.best}</b><span>Mejor racha</span></div></div>
-<h2>Logros</h2><div class="card">${logros.map(l=>`<div style="opacity:${l[0]?1:.4}">${l[1]}</div>`).join('')}</div>
-<h2>Últimas partidas</h2><div class="card">${me.hist.length?me.hist.map(h=>`<div class="pl"><span class="n">${esc(h.c)}</span><span class="tag">${h.r==='win'?'🏆 '+h.q+' pts':h.q+' pts'}</span></div>`).join(''):'<span class="mut">Todavía no jugaste.</span>'}</div>
-<h2>Ajustes</h2><div class="card"><div class="row"><button class="sec sm" onclick="sEmoji=me.emoji;sColor=me.color||COL[0];sAcc=me.acc||0;go('setup')">Editar perfil</button><button class="sec sm" onclick="toggleTheme()">🌗 Tema</button><button class="sec sm" onclick="toggleSnd()">${snd?'🔊':'🔇'} Sonido</button></div></div>`}
+<h2>Logros</h2><div class="card">${logros.map(l=>`<div style="opacity:${l[0]?1:.4}">${ic(l[2])}${l[1]}</div>`).join('')}</div>
+<h2>Últimas partidas</h2><div class="card">${me.hist.length?me.hist.map(h=>`<div class="pl"><span class="n">${esc(h.c)}</span><span class="tag">${h.r==='win'?'Ganó · '+h.q+' pts':h.q+' pts'}</span></div>`).join(''):'<span class="mut">Todavía no jugaste.</span>'}</div>
+<h2>Ajustes</h2><div class="card"><div class="row"><button class="sec sm" onclick="sEmoji=me.emoji;sColor=me.color||COL[0];sAcc=me.acc||0;go('setup')">Editar perfil</button><button class="sec sm" onclick="toggleTheme()">Tema</button><button class="sec sm" onclick="toggleSnd()">Sonido ${snd?'activado':'apagado'}</button></div></div>`}
 function toggleTheme(){const d=document.documentElement,dark=d.dataset.theme==='dark'||(!d.dataset.theme&&matchMedia('(prefers-color-scheme:dark)').matches);d.dataset.theme=dark?'light':'dark'}
 /* ---------- jugar / crear / unirse ---------- */
 function vPlay(){return `<button class="back" onclick="go('menu')">← Volver</button><h1>Jugar</h1><p class="sub">De 2 a 6 jugadores</p>
-<div class="menu"><button class="big" onclick="go('create')">➕ Crear partida</button><button class="big sec" onclick="go('join')">🔑 Unirse</button></div>`}
+<div class="menu"><button class="big" onclick="go('create')">${ic('card_add')}Crear partida</button><button class="big sec" onclick="go('join')">${ic('lock_open')}Unirse</button></div>`}
 const pd=()=>({name:me.nick,emoji:me.emoji,color:me.color||COL[0],bn:(me.eq||{}).bn||'',fx:(me.eq||{}).fx||'confetti',lives:2,total:0,qs:0,done:'',score:0,doneAt:0});
-const av=p=>`<span class="av" style="background:${esc(p.color||COL[0])}">${esc(p.emoji)}</span>`;
+const av=p=>{const k=AN.includes(p.emoji)?p.emoji:AN[[...String(p.emoji||'')].reduce((a,c)=>a+c.codePointAt(0),0)%AN.length],c=esc(p.color||COL[0]);return `<span class="av" style="background:color-mix(in srgb,${c} 28%,var(--card));box-shadow:0 0 0 3px ${c}"><img src="assets/animals/${k}.png" alt=""></span>`};
 function sel(){if(mode==='default')return{cats:Object.keys(CATS),cc:{}};
-  const o={};(me.cc||[]).forEach(c=>{if(ccSel.includes(c.n))o[c.n]=c.ch});if(custom.length)o['✍️ Extras']=custom;return{cats,cc:o}}
+  const o={};(me.cc||[]).forEach(c=>{if(ccSel.includes(c.n))o[c.n]=c.ch});if(custom.length)o['Extras']=custom;return{cats,cc:o}}
 function count(){const s=sel();return new Set([...s.cats.filter(c=>CATS[c]).flatMap(c=>CATS[c]),...Object.values(s.cc).flat()].map(norm)).size}
 function vCreate(){const cc=me.cc||[];return `<button class="back" onclick="go('play')">← Volver</button><h1>Crear partida</h1>
 <div class="row"><button class="${mode==='default'?'':'sec'}" onclick="mode='default';render()">Por defecto</button><button class="${mode==='custom'?'':'sec'}" onclick="mode='custom';render()">Personalizar</button></div>
-${mode==='default'?'<div class="card">Todas las categorías mezcladas y personajes al azar ✨</div>':`
+${mode==='default'?'<div class="card">Todas las categorías mezcladas y personajes al azar</div>':`
 <h2>Categorías</h2><div class="row"><button class="sec sm" onclick="cats=Object.keys(CATS);render()">Todas</button><button class="sec sm" onclick="cats=[];render()">Ninguna</button></div>
 <div class="chips">${Object.keys(CATS).map((c,i)=>`<span class="chip ${cats.includes(c)?'on':''}" onclick="togCat(${i})">${esc(c)}</span>`).join('')}</div>
 <h2>Mis categorías</h2>
-${cc.map((c,i)=>`<div class="pl"><span class="chip ${ccSel.includes(c.n)?'on':''}" onclick="togCC(${i})">${esc(c.n)} · ${c.ch.length}</span><span class="n"></span><button class="sec sm" onclick="delCat(${i})">🗑</button></div>`).join('')||'<p class="mut">Todavía no creaste ninguna.</p>'}
+${cc.map((c,i)=>`<div class="pl"><span class="chip ${ccSel.includes(c.n)?'on':''}" onclick="togCC(${i})">${esc(c.n)} · ${c.ch.length}</span><span class="n"></span><button class="sec sm" onclick="delCat(${i})">Borrar</button></div>`).join('')||'<p class="mut">Todavía no creaste ninguna.</p>'}
 <div class="card"><b>Nueva categoría</b><input id="nn" placeholder="Nombre (ej: Mis amigos)" value="${esc(nName)}" oninput="nName=this.value" style="margin:8px 0"><textarea id="nc" placeholder="Personajes separados por coma o enter" oninput="nChars=this.value">${esc(nChars)}</textarea><button class="sec" onclick="saveCat()">Guardar categoría</button></div>
 <h2>Personajes sueltos</h2><div class="row"><input id="add" placeholder="Ej: mi profe de mate" onkeydown="if(event.key==='Enter')addC()"><button class="sm" onclick="addC()">+</button></div>
-<div class="chips">${custom.map((c,i)=>`<span class="chip on" onclick="custom.splice(${i},1);render()">${esc(c)} ✕</span>`).join('')}</div>
-<div class="chips"><span class="chip ${hint?'on':''}" onclick="hint=!hint;render()">💡 Pista: ver la categoría de mi personaje</span></div>
+<div class="chips">${custom.map((c,i)=>`<span class="chip on" onclick="custom.splice(${i},1);render()">${esc(c)} ×</span>`).join('')}</div>
+<div class="chips"><span class="chip ${hint?'on':''}" onclick="hint=!hint;render()">Pista: ver la categoría de mi personaje</span></div>
 <h2>Rondas</h2><div class="row"><button class="sm sec" onclick="rounds=Math.max(3,rounds-1);render()">−</button><b style="font-size:26px;flex:1;text-align:center">${rounds}</b><button class="sm sec" onclick="rounds=Math.min(9,rounds+1);render()">+</button></div>`}
 <p class="mut" style="text-align:center">${count()} personajes disponibles</p><button onclick="createRoom()">Crear sala</button>`}
 function togCat(i){const c=Object.keys(CATS)[i];cats=cats.includes(c)?cats.filter(x=>x!==c):[...cats,c];render()}
@@ -283,24 +364,24 @@ function roomBody(){
   if(room.status==='lobby'){const nc=room.cats.filter(c=>CATS[c]).length+Object.keys(room.cc||{}).length;
     return `<h1>Sala</h1><div class="code">${esc(code)}</div><p class="sub">Pasales este código a tus besties</p>
 <div class="card">${players.map(p=>`<div class="pl ${bnc(p)}">${av(p)}<span class="n">${esc(p.name)}</span>${p.id===room.host?'<span class="tag">host</span>':''}</div>`).join('')}
-<p class="mut">${players.length}/6 jugadores · ${nc} categorías · ${room.rounds||3} rondas${room.hint?' · con pista 💡':''}</p></div>
+<p class="mut">${players.length}/6 jugadores · ${nc} categorías · ${room.rounds||3} rondas${room.hint?' · con pista':''}</p></div>
 ${isHost?`<button ${players.length<2?'disabled':''} onclick="startGame(true)">${players.length<2?'Esperando jugadores (mín. 2)':'¡Empezar!'}</button>`:'<p class="sub">Esperando que el host empiece…</p>'}
 <button class="sec" onclick="leaveRoom()">Salir</button>`}
   if(room.status==='roundend'){const rk=[...players].sort((a,b)=>(b.total||0)-(a.total||0));
-    return `<h1>Ronda ${room.round}/${room.rounds} ✔</h1><div class="card">${rk.map(p=>`<div class="pl ${bnc(p)}">${av(p)}<span class="n"><b>${esc(p.name)}</b> ${hearts(p)}<div class="mut">${esc(room.chars[p.id])} · ${p.done==='win'?'+'+p.score+' pts':p.done==='out'?'sin corazones':'se rindió'}</div></span><b>${p.total||0}</b></div>`).join('')}</div>
-${isHost?'<button onclick="startGame(false)">➡️ Siguiente ronda</button>':'<p class="sub">Esperando que el host siga…</p>'}<button class="sec" onclick="leaveRoom()">Salir</button>`}
+    return `<h1>Ronda ${room.round}/${room.rounds}</h1><div class="card">${rk.map(p=>`<div class="pl ${bnc(p)}">${av(p)}<span class="n"><b>${esc(p.name)}</b> ${hearts(p)}<div class="mut">${esc(room.chars[p.id])} · ${p.done==='win'?'+'+p.score+' pts':p.done==='out'?'sin corazones':'se rindió'}</div></span><b>${p.total||0}</b></div>`).join('')}</div>
+${isHost?'<button onclick="startGame(false)">'+ic('card_flip')+'Siguiente ronda</button>':'<p class="sub">Esperando que el host siga…</p>'}<button class="sec" onclick="leaveRoom()">Salir</button>`}
   if(room.status==='finished'){
     const rk=[...players].sort((a,b)=>(b.total||0)-(a.total||0));
-    return `<h1>🏁 Final</h1><div class="card">${rk.map((p,i)=>`<div class="pl ${bnc(p)}">${av(p)}<span class="n"><b>${i===0&&p.fx==='crown'&&p.total?'👑':['🥇','🥈','🥉'][i]||'🎖️'} ${esc(p.name)}</b><div class="mut">${room.rounds} rondas</div></span><b>${p.total||0} pts</b></div>`).join('')}</div>
-${isHost?'<button onclick="rematch()">🔁 Revancha</button>':'<p class="sub">El host puede iniciar la revancha</p>'}<button class="sec" onclick="leaveRoom()">Salir</button>`}
+    return `<h1>${ic('crown_a')}Final</h1><div class="card">${rk.map((p,i)=>`<div class="pl ${bnc(p)}">${av(p)}<span class="n"><b>${rk(i,p)} ${esc(p.name)}</b><div class="mut">${room.rounds} rondas</div></span><b>${p.total||0} pts</b></div>`).join('')}</div>
+${isHost?'<button onclick="rematch()">'+ic('cards_shuffle')+'Revancha</button>':'<p class="sub">El host puede iniciar la revancha</p>'}<button class="sec" onclick="leaveRoom()">Salir</button>`}
   const m=P(uid),mine=room.turn===uid&&!m.done,tp=P(room.turn);
   return `<div class="mut" style="text-align:center">Sala ${esc(code)}</div>
-<div class="play"><div class="turn">${m.done?(m.done==='win'?'🎉 ¡Adivinaste! Sos espectador':(m.done==='out'?'🖤 Te quedaste sin corazones. Sos espectador':'Te rendiste. Sos espectador')):mine?'👉 ¡Es tu turno! Hacé tu pregunta en voz alta':'Turno de '+esc(tp.emoji||'')+' '+esc(tp.name||'…')}</div>
-<div class="card mine" style="text-align:center"><div class="mut">Tu personaje</div>${m.done?`<div class="ch">${esc(room.chars[uid])}</div>`:'<div class="q">❓</div>'}${room.hint&&!m.done?`<span class="tag">💡 ${esc((room.cat||{})[uid]||'')}</span>`:''}<div class="hearts">${hearts(m)}</div><div class="mut">Ronda ${room.round}/${room.rounds} · Preguntas usadas: ${m.qs||0}</div></div>
-<div class="oth"><h2>Los demás</h2>${players.filter(p=>p.id!==uid).map(p=>`<div class="card pl ${bnc(p)}">${av(p)}<span class="n">${esc(p.name)} ${hearts(p)}<div class="ch">${esc(room.chars[p.id])}</div></span>${p.done?`<span class="tag">${p.done==='win'?'✔ adivinó':p.done==='out'?'🖤 eliminado':'se rindió'}</span>`:''}</div>`).join('')}</div>
+<div class="play"><div class="turn">${m.done?(m.done==='win'?ic('tag_d6_check')+'¡Adivinaste! Sos espectador':(m.done==='out'?ic('skull')+'Te quedaste sin corazones. Sos espectador':ic('flag_triangle')+'Te rendiste. Sos espectador')):mine?ic('pawn_right')+'¡Es tu turno! Hacé tu pregunta en voz alta':ic('hourglass')+'Turno de '+esc(tp.name||'…')}</div>
+<div class="card mine" style="text-align:center"><div class="mut">Tu personaje</div>${m.done?`<div class="ch">${esc(room.chars[uid])}</div>`:EYES}${room.hint&&!m.done?`<span class="tag">${ic('hexagon_question')}${esc((room.cat||{})[uid]||'')}</span>`:''}<div class="hearts">${hearts(m)}</div><div class="mut">Ronda ${room.round}/${room.rounds} · Preguntas usadas: ${m.qs||0}</div></div>
+<div class="oth"><h2>Los demás</h2>${players.filter(p=>p.id!==uid).map(p=>`<div class="card pl ${bnc(p)}">${av(p)}<span class="n">${esc(p.name)} ${hearts(p)}<div class="ch">${esc(room.chars[p.id])}</div></span>${p.done?`<span class="tag">${p.done==='win'?ic('tag_d6_check')+'adivinó':p.done==='out'?ic('skull')+'eliminado':ic('flag_triangle')+'se rindió'}</span>`:''}</div>`).join('')}</div>
 <div class="act">${mine?(guessing?`<div class="card"><input id="gin" placeholder="Creo que soy…" oninput="gtext=this.value" onkeydown="if(event.key==='Enter')guess()"><button onclick="guess()">Confirmar</button><button class="sec" onclick="guessing=false;render()">Cancelar</button></div>`
-:`<button onclick="passTurn()">✅ Ya me respondieron (pasar turno)</button><button class="sec" onclick="guessing=true;gtext='';render()">🤔 Creo que soy…</button>`):''}
-${!m.done?'<button class="back" onclick="giveUp()">Me rindo</button>':''}${isHost&&room.turn&&!P(room.turn).done?'<button class="back" onclick="skipTurn()">Saltear turno de '+esc(tp.name||'')+' (host)</button>':''}
+:`<button onclick="passTurn()">${ic('tag_d6_check')}Ya me respondieron (pasar turno)</button><button class="sec" onclick="guessing=true;gtext='';render()">${ic('dice_question')}Creo que soy…</button>`):''}
+${!m.done?'<button class="back" onclick="giveUp()">'+ic('flag_triangle')+'Me rindo</button>':''}${isHost&&room.turn&&!P(room.turn).done?'<button class="back" onclick="skipTurn()">'+ic('pawn_skip')+'Saltear turno de '+esc(tp.name||'')+' (host)</button>':''}
 <button class="back" onclick="leaveRoom()">Salir de la sala</button></div></div><div style="height:70px"></div>`;
 }
 function startGame(first){run(async()=>{
@@ -325,8 +406,8 @@ function guess(){run(async()=>{
   guessing=false;gtext='';
   if(ok){me.wins++;me.qsTotal+=qs;me.fast=Math.min(me.fast,qs);confetti();coin(100);await plRef(code,uid).update({qs,done:'win',score:Math.max(1,11-qs),doneAt:Date.now()});await rRef(code).update({turn:nextAfter(uid,[uid])});}
   else{const l=(P(uid).lives??2)-1;
-    if(l<=0){play('lose');await plRef(code,uid).update({qs,lives:0,done:'out',score:0,doneAt:Date.now()});await rRef(code).update({turn:nextAfter(uid,[uid])});msg='Sin corazones 🖤 Quedaste fuera de la ronda'}
-    else{await plRef(code,uid).update({qs,lives:l});await rRef(code).update({turn:nextAfter(uid,[])});play('wrong');msg='Nop, ese no es 💔 Te queda medio corazón'}
+    if(l<=0){play('lose');await plRef(code,uid).update({qs,lives:0,done:'out',score:0,doneAt:Date.now()});await rRef(code).update({turn:nextAfter(uid,[uid])});msg='Sin corazones. Quedaste fuera de la ronda'}
+    else{await plRef(code,uid).update({qs,lives:l});await rRef(code).update({turn:nextAfter(uid,[])});play('wrong');msg='Nop, ese no es. Te queda medio corazón'}
     render()}})}
 function giveUp(){if(!confirm('¿Seguro que te rendís?'))return;run(async()=>{
   play('lose');const wasTurn=room.turn===uid;await plRef(code,uid).update({done:'gaveup',lives:0,score:0,doneAt:Date.now()});
@@ -334,6 +415,7 @@ function giveUp(){if(!confirm('¿Seguro que te rendís?'))return;run(async()=>{
 function skipTurn(){run(async()=>{await rRef(code).update({turn:nextAfter(room.turn,[])})})}
 document.addEventListener('click',e=>{if(e.target.closest('button,.chip,.dot'))play('click')});
 const wide=()=>matchMedia('(min-width:900px)').matches;matchMedia('(min-width:900px)').addEventListener('change',()=>render());
+document.addEventListener('pointermove',e=>document.querySelectorAll('.eye').forEach(el=>{const r=el.getBoundingClientRect(),dx=e.clientX-(r.left+r.width/2),dy=e.clientY-(r.top+r.height/2),d=Math.hypot(dx,dy)||1,m=Math.min(d,r.width)*.2;el.querySelector('.pu').style.transform=`translate(${dx/d*m}px,${dy/d*m}px)`}));
 init();
 </script>
 </body>
