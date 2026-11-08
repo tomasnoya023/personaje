@@ -151,6 +151,25 @@ input:focus,textarea:focus{outline:3px solid color-mix(in srgb,var(--pri) 45%,tr
 .turn .ic{width:1.4em;height:1.4em}h1 .ic{width:.9em;height:.9em;margin-right:.3em;vertical-align:-.1em;color:#f5b301}button.big span .ic{width:1.1em;height:1.1em}
 .chip.avc{position:relative}.chip.lock::after{content:'';position:absolute;right:-3px;bottom:-3px;width:22px;height:22px;background:var(--tx);-webkit-mask:url(assets/icons/lock_closed.png) center/contain no-repeat;mask:url(assets/icons/lock_closed.png) center/contain no-repeat}
 </style>
+<style>
+.hr,.hr.b{background:#e11d48}.hr.z{background:#9aa0c4}.mine .hr,.mine .hr.b{background:#e11d48}.mine .hr.z{background:rgba(255,255,255,.45)}
+.mine .hearts{filter:drop-shadow(1.5px 0 0 #fff) drop-shadow(-1.5px 0 0 #fff) drop-shadow(0 1.5px 0 #fff) drop-shadow(0 -1.5px 0 #fff)}
+#app.noanim .card:not([class*=bn-]),#app.noanim .ch,#app.noanim .turn{animation:none!important}
+.play>*{margin-top:0;margin-bottom:14px}.card{margin-bottom:14px}.oth{display:grid;gap:12px;align-content:start}.oth .card{margin:0}.oth h2{margin:4px 0 0}
+.pl .n{flex:1;min-width:0;display:flex;flex-direction:column;gap:3px}.pl .n .ch{font-size:22px;line-height:1.15}.pl{gap:12px}
+.hearts{margin:12px 0}.eyes{margin:14px 0}.mine .tag{display:inline-block;margin:6px 0 4px}.tag{padding:4px 10px}.turn{margin-bottom:14px}
+.act{display:flex;flex-direction:column;gap:10px}.act button{margin:0}.row{gap:10px}button+button{margin-top:10px}
+.swp{align-self:flex-start;margin-top:8px;font-size:13px;padding:8px 12px}.swp.on{background:var(--pri);color:#fff;border-color:var(--pri)}
+</style>
+<style>
+.cat{display:inline-block;width:var(--s);height:var(--s);background-size:calc(var(--n)*var(--s)) var(--s);background-repeat:no-repeat;image-rendering:pixelated;animation:catf var(--d) steps(var(--n)) infinite;vertical-align:bottom}
+@keyframes catf{to{background-position-x:calc(var(--n)*var(--s)*-1)}}
+.mine{position:relative}.petw{position:absolute;right:6px;bottom:2px;pointer-events:none}
+.pv>img.bgp{width:100%;height:84px;object-fit:cover;border-radius:12px}
+</style>
+<style>.hab{display:inline-flex;align-items:flex-end;justify-content:center;width:calc(var(--s)*1.7);height:calc(var(--s)*1.05);border-radius:14px;background-size:cover;background-position:center bottom;overflow:hidden}
+.petw .hab{box-shadow:0 0 0 2px rgba(255,255,255,.6)}
+</style>
 </head>
 <body>
 <div id="app"><p class="sub">Cargando…</p></div>
@@ -165,19 +184,41 @@ const CATS={
 "Animales":["Pingüino","Jirafa","Pulpo","Perezoso","Carpincho","Flamenco","Camaleón","Koala","Delfín","Murciélago","Lobo","Zorro","Elefante","León","Tigre","Panda","Canguro","Pato","Tortuga","Oso polar","Mono","Cocodrilo","Búho","Loro","Gato","Perro"]};
 const AN=['panda', 'penguin', 'parrot', 'giraffe', 'monkey', 'pig', 'rabbit', 'hippo', 'elephant', 'snake'],EM=AN;
 const CN='<i class="cn"></i>';
+const DESC={"Shakira": "cantante colombiana", "Taylor Swift": "cantautora estadounidense", "Bad Bunny": "cantante puertorriqueño de trap y reguetón", "Beyoncé": "cantante estadounidense", "Rihanna": "cantante de Barbados", "Dua Lipa": "cantante pop británica", "Cristiano Ronaldo": "futbolista portugués", "Neymar": "futbolista brasileño", "Michael Jackson": "el rey del pop", "Justin Bieber": "cantante canadiense", "Billie Eilish": "cantante pop estadounidense", "Ariana Grande": "cantante pop estadounidense", "Selena Gomez": "cantante y actriz", "Zendaya": "actriz de Euphoria y Spider-Man", "Tom Holland": "actor, el Spider-Man actual", "Will Smith": "actor de Hollywood", "Dwayne Johnson": "actor y ex luchador, La Roca", "Kim Kardashian": "celebridad de reality", "Harry Styles": "cantante, ex One Direction", "Ed Sheeran": "cantautor británico", "Lady Gaga": "cantante pop estadounidense", "Madonna": "la reina del pop", "Bruno Mars": "cantante estadounidense", "Karol G": "cantante colombiana de reguetón", "MrBeast": "youtuber de desafíos", "Lionel Messi": "futbolista, campeón del mundo 2022", "Diego Maradona": "ídolo del fútbol, el Diez", "Susana Giménez": "diva de la televisión", "Evita Perón": "primera dama y figura política", "Mirtha Legrand": "conductora de almuerzos televisivos", "Tini Stoessel": "cantante pop", "Lali Espósito": "cantante y actriz", "Duki": "trapero", "Wos": "rapero y freestyler", "Nicki Nicole": "cantante de trap", "Dibu Martínez": "arquero de la Selección", "Ricardo Darín": "actor de cine", "Charly García": "rockero histórico", "Gustavo Cerati": "líder de Soda Stereo", "Luis Alberto Spinetta": "rockero, Almendra y Spinetta Jade", "Moria Casán": "vedette y conductora", "Marcelo Tinelli": "conductor de Showmatch", "Guillermo Francella": "actor cómico", "Pampita": "modelo y conductora", "Wanda Nara": "empresaria y mediática", "La Mona Jiménez": "cantante de cuarteto cordobés", "Lionel Scaloni": "técnico de la Selección", "Fito Páez": "músico rosarino", "María Becerra": "cantante urbana", "Paulo Londra": "cantante urbano", "Ángel Di María": "futbolista, el Fideo", "Sergio Agüero": "futbolista, el Kun", "Papa Francisco": "líder de la Iglesia católica", "Nathy Peluso": "cantante y rapera", "Coscu": "streamer", "Bob Esponja": "esponja amarilla de Fondo de Bikini", "Patricio Estrella": "estrella de mar, amigo de Bob", "Calamardo": "pulpo gruñón, vecino de Bob", "Homero Simpson": "padre de Los Simpson", "Bart Simpson": "hijo travieso de los Simpson", "Mickey Mouse": "ratón de Disney", "Pato Donald": "pato de Disney", "Goku": "guerrero de Dragon Ball", "Pikachu": "pokémon eléctrico", "Naruto": "ninja de Konoha", "Doraemon": "gato robot del futuro", "Shin Chan": "niño travieso japonés", "Tom": "gato que persigue a Jerry", "Jerry": "ratón que le gana a Tom", "Bugs Bunny": "conejo de Looney Tunes", "Scooby-Doo": "perro cobarde y detective", "Mafalda": "nena argentina de la tira de Quino", "Dora la exploradora": "niña exploradora con mapa", "Peppa Pig": "cerdita británica", "Stitch": "alienígena azul de Lilo", "Simba": "león de El Rey León", "Elsa": "reina de Frozen", "Rapunzel": "princesa de pelo larguísimo", "Garfield": "gato naranja que ama la lasaña", "Snoopy": "perro de Charlie Brown", "Hello Kitty": "gatita blanca con moño", "El Chavo del 8": "niño de la vecindad mexicana", "Cartman": "chico de South Park", "Coraje el perro cobarde": "perro rosa asustadizo", "Ben 10": "chico con reloj alienígena", "Walter White": "profesor que se hace narco, Breaking Bad", "Eleven": "niña con poderes, Stranger Things", "Rachel Green": "personaje de Friends", "Joey Tribbiani": "actor de Friends", "Phoebe Buffay": "de Friends, toca la guitarra", "Chandler Bing": "de Friends, el sarcástico", "Sheldon Cooper": "físico de The Big Bang Theory", "Michael Scott": "jefe de The Office", "Tyrion Lannister": "de Game of Thrones, el enano", "Daenerys Targaryen": "madre de dragones", "Jon Snow": "de Game of Thrones, la Guardia de la Noche", "Wednesday Addams": "hija de la familia Addams", "Eddie Munson": "metalero de Stranger Things", "Tokio": "de La Casa de Papel", "El Profesor": "mente maestra de La Casa de Papel", "Berlín": "de La Casa de Papel", "Rick Sanchez": "científico loco de Rick y Morty", "Dexter": "forense y asesino en serie", "Sherlock Holmes": "detective de Baker Street", "Dr. House": "médico cínico", "Barney Stinson": "de How I Met Your Mother", "Tommy Shelby": "gánster de Peaky Blinders", "Cersei Lannister": "reina de Game of Thrones", "Joe Goldberg": "protagonista de You", "Peter Griffin": "padre de Padre de familia", "Harry Potter": "mago de la cicatriz", "Hermione Granger": "bruja, amiga de Harry", "Shrek": "ogro verde", "Burro": "compañero parlanchín de Shrek", "Jack Sparrow": "pirata del Caribe", "Darth Vader": "villano de Star Wars", "Yoda": "maestro jedi pequeño y verde", "Spider-Man": "superhéroe arácnido", "Iron Man": "superhéroe de armadura, Tony Stark", "Batman": "justiciero de Gotham", "Joker": "villano enemigo de Batman", "Thanos": "villano del chasquido, Marvel", "Barbie": "muñeca de Mattel", "Ken": "muñeco, novio de Barbie", "Forrest Gump": "hombre sencillo que corre por EE.UU.", "Rose (Titanic)": "pasajera del Titanic", "Rocky Balboa": "boxeador de Filadelfia", "Indiana Jones": "arqueólogo aventurero", "Gollum": "criatura obsesionada con el Anillo", "Gandalf": "mago de El Señor de los Anillos", "Moana": "heroína polinesia de Disney", "Nemo": "pececito payaso", "Woody": "vaquero de Toy Story", "Buzz Lightyear": "astronauta de juguete", "Hulk": "gigante verde de Marvel", "Capitán América": "súper soldado con escudo", "Terminator": "robot asesino del futuro", "Gru": "villano con minions", "Pingüino": "ave que no vuela y vive en el frío", "Jirafa": "animal de cuello larguísimo", "Pulpo": "ocho tentáculos, vive en el mar", "Perezoso": "mamífero lentísimo que cuelga de árboles", "Carpincho": "el roedor más grande del mundo", "Flamenco": "ave rosada de patas largas", "Camaleón": "reptil que cambia de color", "Koala": "marsupial australiano que come eucalipto", "Delfín": "mamífero marino muy inteligente", "Murciélago": "mamífero volador nocturno", "Lobo": "canino salvaje que aúlla", "Zorro": "canino astuto de cola frondosa", "Elefante": "el animal terrestre más grande", "León": "el rey de la selva", "Tigre": "felino grande con rayas", "Panda": "oso blanco y negro que come bambú", "Canguro": "marsupial que salta, Australia", "Pato": "ave acuática que hace cuac", "Tortuga": "reptil con caparazón", "Oso polar": "oso blanco del Ártico", "Mono": "primate trepador", "Cocodrilo": "reptil de mandíbula enorme", "Búho": "ave nocturna de ojos grandes", "Loro": "ave que repite palabras", "Gato": "felino doméstico", "Perro": "el mejor amigo del hombre"};
+let lastKey='';
+const chatMsgs=()=>chat.map(m=>`<div class="m ${m.u===uid?'me':''}"><b>${esc(m.n)}</b> ${m.em?`<img class="emi" src="assets/emotes/${esc(m.em)}.png" alt="">`:''}${esc(m.t)}</div>`).join('')||'<span class="mut">Escribí algo</span>';
+function updChat(){const mg=$('#msgs');if(mg){mg.innerHTML=chatMsgs();mg.scrollTop=mg.scrollHeight}const f=document.querySelector('.fab');if(f)f.innerHTML=(chatOpen?'Cerrar':'Chat')+(unread&&!chatOpen?'<i>'+unread+'</i>':'')}
+const swNeed=()=>Math.floor((players.length-1)/2)+1;
+const vsw=p=>{if(p.done)return '';const n=players.filter(q=>q.id!==p.id&&q.swv===p.id).length,my=P(uid).swv===p.id;return '<button class="sm sec swp'+(my?' on':'')+'" onclick="voteSwap(\''+p.id+'\')">'+ic('card_flip')+'Cambiar personaje'+(n?' ('+n+'/'+swNeed()+')':'')+'</button>'};
+function charPool(){const seen=new Set();return [...room.cats.filter(c=>CATS[c]).flatMap(c=>CATS[c].map(n=>[n,c])),...Object.entries(room.cc||{}).flatMap(([c,a])=>a.map(n=>[n,c]))].filter(([n])=>{const k=norm(n);if(seen.has(k))return false;seen.add(k);return true})}
+async function swapChar(t){const all=charPool(),cur=Object.values(room.chars||{});let pool=all.filter(([n])=>!(room.used||[]).includes(n));if(!pool.length)pool=all.filter(([n])=>!cur.includes(n));
+  if(!pool.length)throw new Error('No quedan personajes para cambiar');const [n,c]=shuffle(pool)[0];
+  await Promise.all(players.map(p=>plRef(code,p.id).update({swv:''})));
+  await rRef(code).update({chars:{...room.chars,[t]:n},cat:{...room.cat,[t]:c},used:[...(room.used||[]),n]})}
+function voteSwap(t){run(async()=>{if(P(uid).swv===t){await plRef(code,uid).update({swv:''});return}
+  const cnt=players.filter(q=>q.id!==uid&&q.id!==t&&q.swv===t).length+1;
+  if(cnt<swNeed()){await plRef(code,uid).update({swv:t});return}
+  await swapChar(t)})}
 const ic=n=>'<i class="ic" style="--i:url(assets/icons/'+n+'.png)"></i>';
 const FREE=['panda','pig','rabbit','penguin'];
 const AVS=[['monkey','Mono',200],['parrot','Loro',250],['giraffe','Jirafa',300],['hippo','Hipopótamo',350],['elephant','Elefante',400],['snake','Serpiente',500]].map(([k,n,p])=>({id:'av_'+k,k,n,p}));
-const EYS=[{id:'',k:'',n:'Seguidor',p:0}].concat([['a','Atento',150],['b','Sospechoso',150],['c','Soñador',200],['d','Fijo',200],['e','Pícaro',250]].map(([k,n,p])=>({id:'eye_'+k,k,n,p})));
+const PETS=[{id:'',k:'',n:'Sin mascota',p:0},{id:'pet_1',k:'1',n:'Siamés',p:0}].concat([[2,'Gato negro',300],[3,'Canela',350],[4,'Atigrado',350],[5,'Nube',400],[6,'Esfinge',450]].map(([k,n,p])=>({id:'pet_'+k,k:String(k),n,p}))).concat([{id:'pet_eyes',k:'eyes',n:'Ojitos curiosos',p:1200}]);
+const BGS=[{id:'',k:'',n:'Sin hábitat',p:0},{id:'bg_empty',k:'empty',n:'Cielo',p:0}].concat([['castles','Castillos',150],['forest','Bruma',150],['desert','Pirámides',150],['grass','Pradera',200],['fall','Otoño',200],['cforest','Pinar',250],['cdesert','Dunas',250]].map(([k,n,p])=>({id:'bg_'+k,k,n,p})));
+const CATA={idle:['idle',10],meow:['meow',4],sleep:['sleep',1],stretch:['stretch',13],walk:['walk',8]};
+const catH=(c,a,sz)=>{const [f,n]=CATA[a]||CATA.idle;return '<span class="cat" style="--n:'+n+';--s:'+sz+'px;--d:'+(n*.12)+'s;background-image:url(assets/cats/cat'+c+'-'+f+'.png)"></span>'};
+const petK=()=>(((me&&me.eq)||{}).pet||'').replace('pet_','');
+const hk=()=>(((me&&me.eq)||{}).bg||'').replace('bg_','');
+const petBox=(c,a,sz,bg)=>'<span class="hab" style="--s:'+sz+'px;'+(bg?'background-image:url(assets/bg/'+bg+'.webp)':'')+'">'+catH(c,a,sz)+'</span>';
+const petOf=(m,mine)=>petK()&&petK()!=='eyes'?'<div class="petw">'+petBox(petK(),m.done==='win'?'stretch':m.done?'sleep':mine?'meow':'idle',88,hk())+'</div>':'';
 const EMS=[['faceHappy','Feliz',0],['question','Duda',0],['laugh','Jajaja',100],['heart','Corazón',100],['faceSad','Triste',100],['faceAngry','Enojo',100],['star','Estrella',150],['idea','Idea',150],['music','Música',150],['cash','Dinero',200]].map(([k,n,p])=>({id:'em_'+k,k,n,p}));
 const avOK=a=>FREE.includes(a)||!!(me&&(me.owned||[]).includes('av_'+a)),emOK=x=>x.p===0||!!(me&&(me.owned||[]).includes(x.id));
 function floatEm(k){if(!EMS.some(x=>x.k===k))return;const e=document.createElement('span');e.className='cf';e.innerHTML='<img class="emf" src="assets/emotes/'+k+'.png" alt="">';e.style.cssText='left:'+(10+Math.random()*75)+'vw;top:100vh;animation:rise 2.6s ease-out forwards';document.body.appendChild(e);setTimeout(()=>e.remove(),2800)}
 function sendEm(k){if(chCh)chCh.send({type:'broadcast',event:'m',payload:{u:uid,n:me.nick,t:'',em:k}})}
-function eyes(){const k=((me.eq||{}).eye||'').replace('eye_','');return k?'<div class="eyes">'+('<img class="gl" src="assets/eyes/googly-'+k+'.png" alt="">').repeat(2)+'</div>':eyes()}
+function eyes(){return petK()==='eyes'?EYEST:EYES}
 const CROWN='<svg viewBox="0 0 64 48"><path d="M4 40 8 12 22 26 32 6 42 26 56 12 60 40Z" fill="#ffc83d" stroke="#b9770e" stroke-width="3" stroke-linejoin="round"/><rect x="6" y="40" width="52" height="6" rx="2" fill="#e8a317"/></svg>';
 const CROWN_S=CROWN.replace('<svg','<svg width="24" height="18" style="vertical-align:-3px;margin-right:4px"');
-const EYES='<div class="eyes">'+'<span class="eye"><img src="assets/eyes/0.png" alt=""><span class="pu"><img src="assets/eyes/1.png" alt=""><img src="assets/eyes/2.png" alt=""></span></span>'.repeat(2)+'</div>';
-const rk=(i,p)=>(i===0&&p.fx==='crown'&&p.total?CROWN_S:'')+'<i class="tg'+(i===0?' g':'')+'" style="-webkit-mask-image:url(assets/tag_'+(i+1)+'.png);mask-image:url(assets/tag_'+(i+1)+'.png)"></i>';
+const eyeH=t=>'<div class="eyes">'+('<span class="eye'+(t?' trk':'')+'"><img src="assets/eyes/0.png" alt=""><span class="pu"><img src="assets/eyes/1.png" alt=""><img src="assets/eyes/2.png" alt=""></span></span>').repeat(2)+'</div>',EYES=eyeH(0),EYEST=eyeH(1);
+const rkTag=(i,p)=>(i===0&&p.fx==='crown'&&p.total?CROWN_S:'')+'<i class="tg'+(i===0?' g':'')+'" style="-webkit-mask-image:url(assets/tag_'+(i+1)+'.png);mask-image:url(assets/tag_'+(i+1)+'.png)"></i>';
 const COL=["#7c3aed","#ec4899","#0ea5e9","#16a34a","#f97316","#eab308","#14b8a6","#64748b"],ACC=["#7c3aed","#ec4899","#0ea5e9","#16a34a","#f97316","#e11d48"];
 const $=s=>document.querySelector(s),app=$('#app');
 const BN=[{id:'gold',n:'Dorado',p:300},{id:'neon',n:'Neón',p:400},{id:'ice',n:'Hielo',p:500},{id:'rainbow',n:'Arcoíris',p:600},{id:'fire',n:'Fuego',p:800},{id:'galaxy',n:'Galaxia',p:1000}];
@@ -188,15 +229,15 @@ function toast(t){const s=document.createElement('div');s.className='toast';s.te
 function coin(n){me.coins=(me.coins||0)+n;pRef().set(me).catch(()=>{});toast('+'+n+' monedas');setTimeout(()=>play('coins'),700)}
 function finishFx(){const w=[...players].sort((a,b)=>(b.total||0)-(a.total||0))[0];if(w&&w.total>0)confetti(w.fx||'confetti');else play('lose')}
 let shopTab='bn';
-const TABS=[['bn','Banners'],['fx','Efectos'],['av','Avatares'],['eye','Ojos'],['em','Emotes']],LIST=()=>({bn:BN,fx:FX,av:AVS,eye:EYS,em:EMS});
-function applyEq(t,it){if(t==='em')return;if(t==='av')me.emoji=it.k;else me.eq={...(me.eq||{}),[t]:it.id}}
+const TABS=[['bn','Banners'],['fx','Efectos'],['av','Avatares'],['pet','Mascotas'],['bg','Hábitats'],['em','Emotes']],LIST=()=>({bn:BN,fx:FX,av:AVS,eye:EYS,em:EMS,misc:MISC,pet:PETS,bg:BGS});
+function applyEq(t,it){if(t==='em')return;if(t==='av')me.emoji=it.k;else me.eq={...(me.eq||{}),[t==='misc'?'eye':t]:it.id}}
 function buy(t,id){run(async()=>{const it=LIST()[t].find(x=>x.id===id);if((me.coins||0)<it.p)throw new Error('Te faltan monedas');
   me.coins-=it.p;me.owned=[...(me.owned||[]),id];applyEq(t,it);play('edit');await pRef().set(me);render()})}
 function equip(t,id){run(async()=>{applyEq(t,LIST()[t].find(x=>x.id===id)||{id:'',k:''});play('equip');await pRef().set(me);render()})}
 function vShop(){const e=me.eq||{},L=LIST()[shopTab];
-  const has=x=>x.p===0||own(x.id),on=x=>({bn:(e.bn||'')===x.id,fx:(e.fx||'confetti')===x.id,av:me.emoji===x.k,eye:(e.eye||'')===x.id,em:true})[shopTab];
+  const has=x=>x.p===0||own(x.id),on=x=>({bn:(e.bn||'')===x.id,fx:(e.fx||'confetti')===x.id,av:me.emoji===x.k,eye:(e.eye||'')===x.id,misc:(e.eye||'')===x.id,pet:(e.pet||'')===x.id,bg:(e.bg||'')===x.id,em:true})[shopTab];
   const btn=x=>has(x)?(on(x)?'<span class="tag">'+(shopTab==='em'?'Tuyo':'Equipado')+'</span>':`<button class="sm" onclick="equip('${shopTab}','${x.id}')">Equipar</button>`):`<button class="sm" onclick="buy('${shopTab}','${x.id}')">${CN} ${x.p}</button>`;
-  const pv=x=>shopTab==='av'?`<img src="assets/animals/${x.k}.png" alt="">`:shopTab==='em'?`<img class="emp" src="assets/emotes/${x.k}.png" alt="">`:shopTab==='eye'?(x.k?`<img class="gl" src="assets/eyes/googly-${x.k}.png" alt=""><img class="gl" src="assets/eyes/googly-${x.k}.png" alt="">`:EYES):'';
+  const pv=x=>shopTab==='pet'?(x.k==='eyes'?EYEST:x.k?petBox(x.k,'idle',72,hk()):'<span class="mut">Sin mascota</span>'):shopTab==='bg'?(x.k?'<span class="hab" style="--s:72px;background-image:url(assets/bg/'+x.k+'.webp)">'+(petK()&&petK()!=='eyes'?catH(petK(),'idle',72):'')+'</span>':'<span class="mut">Sin hábitat</span>'):shopTab==='av'?`<img src="assets/animals/${x.k}.png" alt="">`:shopTab==='em'?`<img class="emp" src="assets/emotes/${x.k}.png" alt="">`:'';
   const body=shopTab==='bn'?`<div class="card"><div class="row" style="justify-content:space-between"><b>Sin banner</b>${e.bn?`<button class="sm sec" onclick="equip('bn','')">Equipar</button>`:'<span class="tag">Equipado</span>'}</div></div>
 <div class="shopg">${L.map(x=>`<div class="card"><div class="pl bn bn-${x.id}">${av(me)}<span class="n">${esc(me.nick)}</span></div><div class="row" style="justify-content:space-between"><b>${x.n}</b>${btn(x)}</div></div>`).join('')}</div>`
   :`<div class="sq">${L.map(x=>`<div class="card"><div class="pv">${pv(x)}</div><b>${x.n}</b>${shopTab==='fx'?`<button class="sm sec" style="width:100%;margin-top:8px" onclick="confetti('${x.id}')">Probar</button>`:''}<div style="margin-top:8px">${btn(x)}</div></div>`).join('')}</div>`;
@@ -218,7 +259,7 @@ function play(n){if(!snd)return;try{const a=SND[n]||(SND[n]=new Audio('sounds/'+
 function toggleSnd(){snd=!snd;try{localStorage.setItem('snd',snd?'1':'0')}catch(e){}render()}
 let sColor=COL[0],sAcc=0,ccSel=[],hint=false,nName='',nChars='',chCh=null,chat=[],chatOpen=false,unread=0;
 function applyAcc(i){const r=document.documentElement.style;r.setProperty('--pri',ACC[i??me.acc??0]);r.setProperty('--prt','#fff')}
-function startChat(c){chat=[];unread=0;chCh=sb.channel('chat-'+c,{config:{broadcast:{self:true}}}).on('broadcast',{event:'m'},({payload})=>{chat=[...chat,payload].slice(-80);if(payload.em)floatEm(payload.em);if(payload.u!==uid)play('message');if(!chatOpen)unread++;if(view==='room')render()}).subscribe()}
+function startChat(c){chat=[];unread=0;chCh=sb.channel('chat-'+c,{config:{broadcast:{self:true}}}).on('broadcast',{event:'m'},({payload})=>{chat=[...chat,payload].slice(-80);if(payload.em)floatEm(payload.em);if(payload.u!==uid)play('message');if(!chatOpen)unread++;if(view==='room')updChat()}).subscribe()}
 function sendChat(){const i=$('#cin'),t=i&&i.value.trim();if(!t||!chCh)return;i.value='';chCh.send({type:'broadcast',event:'m',payload:{u:uid,n:me.nick,e:me.emoji,t}})}
 function chatUI(){return `<button class="fab" onclick="chatOpen=!chatOpen;unread=0;render()">${chatOpen?'Cerrar':'Chat'}${unread&&!chatOpen?`<i>${unread}</i>`:''}</button>`+(chatOpen||wide()?`<div class="chat"><div class="msgs" id="msgs">${chat.map(m=>`<div class="m ${m.u===uid?'me':''}"><b>${esc(m.n)}</b> ${m.em?`<img class="emi" src="assets/emotes/${esc(m.em)}.png" alt="">`:''}${esc(m.t)}</div>`).join('')||'<span class="mut">Escribí algo</span>'}</div><div class="emr">${EMS.filter(emOK).map(x=>`<button class="em" onclick="sendEm('${x.k}')"><img src="assets/emotes/${x.k}.png" alt="${x.n}"></button>`).join('')}</div><div class="row"><input id="cin" maxlength="200" placeholder="Mensaje…" onkeydown="if(event.key==='Enter')sendChat()"><button class="sm" onclick="sendChat()">Enviar</button></div></div>`:'')}
 const esc=s=>String(s??'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
@@ -264,6 +305,7 @@ async function init(){
 function render(){
   const a=document.activeElement,id=a&&a.id,val=a&&a.value;
   const v={setup:vSetup,menu:vMenu,profile:vProfile,play:vPlay,create:vCreate,join:vJoin,room:vRoom,shop:vShop}[view];
+  {const key=view+'|'+(room?room.status+'|'+room.round+'|'+players.filter(p=>p.done).length+'|'+Object.values(room.chars||{}).join():'');app.classList.toggle('noanim',key===lastKey);lastKey=key}
   app.dataset.v=view+(view==='room'&&room?room.status:'');document.body.classList.toggle('inroom',view==='room');app.innerHTML=v()+(msg?'<p class="err">'+esc(msg)+'</p>':'');
   const n=id&&document.getElementById(id);if(n&&val!=null){n.value=val;n.focus()}
   const g=$('#gin');if(g){g.value=gtext;g.focus()}
@@ -281,7 +323,7 @@ function keepNick(){const n=$('#nick');if(n)me={...(me||{}),nick:n.value}}
 function saveProfile(){run(async()=>{const n=$('#nick').value.trim();if(!n)throw new Error('Poné un apodo');
   me={played:0,won:0,streak:0,best:0,qsTotal:0,wins:0,fast:99,hist:[],cc:[],...(me||{}),nick:n,emoji:sEmoji,color:sColor,acc:sAcc};applyAcc();play('edit');await pRef().set(me);view='menu';render()})}
 function vMenu(){return `<div class="fan">${['panda','pig','parrot','giraffe','penguin'].map((a,i)=>`<img src="assets/animals/${a}.png" style="--i:${i}" alt="">`).join('')}</div><h1>¿Qué personaje soy?</h1><p class="sub">Adiviná quién sos con preguntas de sí o no.</p>
-<div class="who">${av(me)}<span>${esc(me.nick)}</span></div>
+<div class="who">${av(me)}<span>${esc(me.nick)}</span>${petK()&&petK()!=='eyes'?petBox(petK(),'idle',60,hk()):''}</div>
 <div class="menu"><button class="big" onclick="go('play')"><span>${ic('cards_fan')}Jugar</span><small>Crear una sala o entrar con un código</small></button><button class="big sec" onclick="go('profile')"><span>${ic('pawn')}Perfil</span><small>Estadísticas, logros y ajustes</small></button><button class="big sec" onclick="go('shop')"><span>${ic('pouch')}Tienda</span><small>${CN} ${me.coins||0} monedas</small></button></div>`}
 function vProfile(){
   const avg=me.wins?(me.qsTotal/me.wins).toFixed(1):'–';
@@ -372,13 +414,13 @@ ${isHost?`<button ${players.length<2?'disabled':''} onclick="startGame(true)">${
 ${isHost?'<button onclick="startGame(false)">'+ic('card_flip')+'Siguiente ronda</button>':'<p class="sub">Esperando que el host siga…</p>'}<button class="sec" onclick="leaveRoom()">Salir</button>`}
   if(room.status==='finished'){
     const rk=[...players].sort((a,b)=>(b.total||0)-(a.total||0));
-    return `<h1>${ic('crown_a')}Final</h1><div class="card">${rk.map((p,i)=>`<div class="pl ${bnc(p)}">${av(p)}<span class="n"><b>${rk(i,p)} ${esc(p.name)}</b><div class="mut">${room.rounds} rondas</div></span><b>${p.total||0} pts</b></div>`).join('')}</div>
+    return `<h1>${ic('crown_a')}Final</h1><div class="card">${rk.map((p,i)=>`<div class="pl ${bnc(p)}">${av(p)}<span class="n"><b>${rkTag(i,p)} ${esc(p.name)}</b><div class="mut">${room.rounds} rondas</div></span><b>${p.total||0} pts</b></div>`).join('')}</div>
 ${isHost?'<button onclick="rematch()">'+ic('cards_shuffle')+'Revancha</button>':'<p class="sub">El host puede iniciar la revancha</p>'}<button class="sec" onclick="leaveRoom()">Salir</button>`}
   const m=P(uid),mine=room.turn===uid&&!m.done,tp=P(room.turn);
   return `<div class="mut" style="text-align:center">Sala ${esc(code)}</div>
 <div class="play"><div class="turn">${m.done?(m.done==='win'?ic('tag_d6_check')+'¡Adivinaste! Sos espectador':(m.done==='out'?ic('skull')+'Te quedaste sin corazones. Sos espectador':ic('flag_triangle')+'Te rendiste. Sos espectador')):mine?ic('pawn_right')+'¡Es tu turno! Hacé tu pregunta en voz alta':ic('hourglass')+'Turno de '+esc(tp.name||'…')}</div>
-<div class="card mine" style="text-align:center"><div class="mut">Tu personaje</div>${m.done?`<div class="ch">${esc(room.chars[uid])}</div>`:EYES}${room.hint&&!m.done?`<span class="tag">${ic('hexagon_question')}${esc((room.cat||{})[uid]||'')}</span>`:''}<div class="hearts">${hearts(m)}</div><div class="mut">Ronda ${room.round}/${room.rounds} · Preguntas usadas: ${m.qs||0}</div></div>
-<div class="oth"><h2>Los demás</h2>${players.filter(p=>p.id!==uid).map(p=>`<div class="card pl ${bnc(p)}">${av(p)}<span class="n">${esc(p.name)} ${hearts(p)}<div class="ch">${esc(room.chars[p.id])}</div></span>${p.done?`<span class="tag">${p.done==='win'?ic('tag_d6_check')+'adivinó':p.done==='out'?ic('skull')+'eliminado':ic('flag_triangle')+'se rindió'}</span>`:''}</div>`).join('')}</div>
+<div class="card mine" style="text-align:center">${petOf(m,mine)}<div class="mut">Tu personaje</div>${m.done?`<div class="ch">${esc(room.chars[uid])}</div>`:EYES}${!m.done?`<span class="tag">${ic('hexagon_question')}${esc((room.cat||{})[uid]||'')}</span>`:''}<div class="hearts">${hearts(m)}</div><div class="mut">Ronda ${room.round}/${room.rounds} · Preguntas usadas: ${m.qs||0}</div></div>
+<div class="oth"><h2>Los demás</h2>${players.filter(p=>p.id!==uid).map(p=>`<div class="card pl ${bnc(p)}">${av(p)}<span class="n">${esc(p.name)} ${hearts(p)}<div class="ch">${esc(room.chars[p.id])}</div><div class="mut">${esc([DESC[room.chars[p.id]],(room.cat||{})[p.id]].filter(Boolean).join(' · '))}</div>${vsw(p)}</span>${p.done?`<span class="tag">${p.done==='win'?ic('tag_d6_check')+'adivinó':p.done==='out'?ic('skull')+'eliminado':ic('flag_triangle')+'se rindió'}</span>`:''}</div>`).join('')}</div>
 <div class="act">${mine?(guessing?`<div class="card"><input id="gin" placeholder="Creo que soy…" oninput="gtext=this.value" onkeydown="if(event.key==='Enter')guess()"><button onclick="guess()">Confirmar</button><button class="sec" onclick="guessing=false;render()">Cancelar</button></div>`
 :`<button onclick="passTurn()">${ic('tag_d6_check')}Ya me respondieron (pasar turno)</button><button class="sec" onclick="guessing=true;gtext='';render()">${ic('dice_question')}Creo que soy…</button>`):''}
 ${!m.done?'<button class="back" onclick="giveUp()">'+ic('flag_triangle')+'Me rindo</button>':''}${isHost&&room.turn&&!P(room.turn).done?'<button class="back" onclick="skipTurn()">'+ic('pawn_skip')+'Saltear turno de '+esc(tp.name||'')+' (host)</button>':''}
@@ -390,7 +432,7 @@ function startGame(first){run(async()=>{
   let used=first?[]:(room.used||[]),pool=all.filter(([n])=>!used.includes(n));if(pool.length<players.length){pool=all;used=[]}
   const pick=shuffle(pool),order=shuffle(players.map(p=>p.id)),chars={},cat={};
   order.forEach((u,i)=>{chars[u]=pick[i][0];cat[u]=pick[i][1]});
-  await Promise.all(players.map(p=>plRef(code,p.id).update(first?{qs:0,done:'',score:0,doneAt:0,lives:2,total:0}:{qs:0,done:'',score:0,doneAt:0,lives:2})));
+  await Promise.all(players.map(p=>plRef(code,p.id).update(first?{qs:0,done:'',score:0,doneAt:0,lives:2,total:0,swv:''}:{qs:0,done:'',score:0,doneAt:0,lives:2,swv:''})));
   await rRef(code).update({status:'playing',order,chars,cat,used:[...used,...order.map(u=>chars[u])],turn:order[0],round:first?1:room.round+1,game:first?(room.game||0)+1:room.game,rounds:room.rounds||3})})}
 const cats2=a=>a.filter(c=>CATS[c]);
 function rematch(){run(async()=>{await rRef(code).update({status:'lobby',chars:{},order:[],turn:''})})}
@@ -415,7 +457,7 @@ function giveUp(){if(!confirm('¿Seguro que te rendís?'))return;run(async()=>{
 function skipTurn(){run(async()=>{await rRef(code).update({turn:nextAfter(room.turn,[])})})}
 document.addEventListener('click',e=>{if(e.target.closest('button,.chip,.dot'))play('click')});
 const wide=()=>matchMedia('(min-width:900px)').matches;matchMedia('(min-width:900px)').addEventListener('change',()=>render());
-document.addEventListener('pointermove',e=>document.querySelectorAll('.eye').forEach(el=>{const r=el.getBoundingClientRect(),dx=e.clientX-(r.left+r.width/2),dy=e.clientY-(r.top+r.height/2),d=Math.hypot(dx,dy)||1,m=Math.min(d,r.width)*.2;el.querySelector('.pu').style.transform=`translate(${dx/d*m}px,${dy/d*m}px)`}));
+document.addEventListener('pointermove',e=>document.querySelectorAll('.eye.trk').forEach(el=>{const r=el.getBoundingClientRect(),dx=e.clientX-(r.left+r.width/2),dy=e.clientY-(r.top+r.height/2),d=Math.hypot(dx,dy)||1,m=Math.min(d,r.width)*.2;el.querySelector('.pu').style.transform=`translate(${dx/d*m}px,${dy/d*m}px)`}));
 init();
 </script>
 </body>
