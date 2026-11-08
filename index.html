@@ -229,7 +229,7 @@ function toast(t){const s=document.createElement('div');s.className='toast';s.te
 function coin(n){me.coins=(me.coins||0)+n;pRef().set(me).catch(()=>{});toast('+'+n+' monedas');setTimeout(()=>play('coins'),700)}
 function finishFx(){const w=[...players].sort((a,b)=>(b.total||0)-(a.total||0))[0];if(w&&w.total>0)confetti(w.fx||'confetti');else play('lose')}
 let shopTab='bn';
-const TABS=[['bn','Banners'],['fx','Efectos'],['av','Avatares'],['pet','Mascotas'],['bg','Hábitats'],['em','Emotes']],LIST=()=>({bn:BN,fx:FX,av:AVS,eye:EYS,em:EMS,misc:MISC,pet:PETS,bg:BGS});
+const TABS=[['bn','Banners'],['fx','Efectos'],['av','Avatares'],['pet','Mascotas'],['bg','Hábitats'],['em','Emotes']],LIST=()=>({bn:BN,fx:FX,av:AVS,em:EMS,pet:PETS,bg:BGS});
 function applyEq(t,it){if(t==='em')return;if(t==='av')me.emoji=it.k;else me.eq={...(me.eq||{}),[t==='misc'?'eye':t]:it.id}}
 function buy(t,id){run(async()=>{const it=LIST()[t].find(x=>x.id===id);if((me.coins||0)<it.p)throw new Error('Te faltan monedas');
   me.coins-=it.p;me.owned=[...(me.owned||[]),id];applyEq(t,it);play('edit');await pRef().set(me);render()})}
